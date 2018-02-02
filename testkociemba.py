@@ -2,8 +2,10 @@ import kociemba
 import re
 import pygame
 import time
+import os.path
 
 pygame.init()
+im = lambda im: os.path.join("images", im)
 
 window_height = 90*3
 window_length = 90*4
@@ -13,7 +15,9 @@ clock = pygame.time.Clock()
 Exit = False
 
 faces = ["U", "R", "F", "D", "L", "B"]
-tiles = ["images\\white.jpg", "images\\blue.jpg", "images\\red.jpg", "images\\yellow.jpg", "images\\green.jpg", "images\\orange.jpg"]
+raw_tiles = ["white.jpg", "blue.jpg", "red.jpg", "yellow.jpg", "green.jpg", "orange.jpg"]
+tiles = [im(tile) for tile in raw_tiles]
+
 pos = {}
 for t in range(1, 10):
     pos["U" + str(t)] = (90 + (t - 1) % 3 * 30, 0 + int((t - 1) / 3) * 30)
@@ -37,7 +41,7 @@ init()
 
 
 def background():
-    backGrondImage = pygame.image.load('images\\background.jpg')
+    backGrondImage = pygame.image.load(im("background.jpg"))
     gameDisplay.blit(backGrondImage, (0, 0))
 
 def display_tile(color, place):
@@ -80,7 +84,7 @@ while(not Exit):
         display_tile(tiles[colors[c]], pos[c])
 
     if is_balanced():
-        display_tile("images\\ok.jpg", (300, 210))
+        display_tile(im("ok.jpg"), (300, 210))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
