@@ -69,6 +69,7 @@ def check_pos(pos1, click):
                 change_color(c, click)
                 break
     if pygame.mouse.get_pos()[0] > 300 and pygame.mouse.get_pos()[0] < 330 and pygame.mouse.get_pos()[1] > 210 and pygame.mouse.get_pos()[1] < 240 and is_balanced():
+        print(colors)
         print(translate())
         print(kociemba.solve(translate()))
 
