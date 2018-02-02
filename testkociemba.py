@@ -75,8 +75,9 @@ def check_pos(pos1, click):
 
 def translate():
     arr = ""
-    for i in colors:
-        arr += faces[colors[i]]
+    for f in range(0, 6):
+        for i in range(1, 10):
+            arr += faces[colors[faces[f] + str(i)]]
     return arr
 
 while(not Exit):
