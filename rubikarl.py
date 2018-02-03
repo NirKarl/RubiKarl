@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 Exit = False
 
 faces = ["U", "R", "F", "D", "L", "B"]
-raw_tiles = ["white.jpg", "blue.jpg", "red.jpg", "yellow.jpg", "green.jpg", "orange.jpg"]
+raw_tiles = ["white.jpg", "red.jpg", "blue.jpg", "yellow.jpg", "orange.jpg", "green.jpg"]
 tiles = [im(tile) for tile in raw_tiles]
 
 pos = {}
@@ -73,7 +73,9 @@ def check_pos(pos1, click):
     if pygame.mouse.get_pos()[0] > 300 and pygame.mouse.get_pos()[0] < 330 and pygame.mouse.get_pos()[1] > 210 and pygame.mouse.get_pos()[1] < 240 and is_balanced():
         # print(colors)
         # print(translate())
+        global solution
         solution = kociemba.solve(translate())
+        print("check pos")
         print(solution)
 
 def translate():
@@ -150,6 +152,7 @@ def rotation(unsleep, direction):
     GPIO.output(unsleep, GPIO.LOW)
     print("Face: {1} ({2}) | direction: {3}".format(unsleep, gpios[unsleep], direction))
 
+print(solution)
 commands = re.split(r'\s*', solution)
 print(solution)
 print(commands)
