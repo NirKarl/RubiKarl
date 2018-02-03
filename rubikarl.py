@@ -75,7 +75,6 @@ def check_pos(pos1, click):
         # print(translate())
         global solution
         solution = kociemba.solve(translate())
-        print("check pos")
         print(solution)
 
 def translate():
@@ -152,17 +151,16 @@ def rotation(unsleep, direction):
     GPIO.output(unsleep, GPIO.LOW)
     print("Face: {1} ({2}) | direction: {3}".format(unsleep, gpios[unsleep], direction))
 
-print(solution)
 commands = re.split(r'\s*', solution)
-print(solution)
-print(commands)
 for i in commands:
     if i.__len__() == 1:
         rotation(UNSLEEP[i], CW)
     if i.__len__() == 2:
         if i[1] == "'":
+            print(UNSLEEP[i][0])
             rotation(UNSLEEP[i][0], CCW)
         else:
+            print(UNSLEEP[i][0])
             rotation(UNSLEEP[i][0], CW)
             rotation(UNSLEEP[i][0], CW)
 
