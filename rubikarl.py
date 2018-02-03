@@ -157,11 +157,10 @@ for i in commands:
         rotation(UNSLEEP[i], CW)
     if i.__len__() == 2:
         if i[1] == "'":
-            print(UNSLEEP[i][0])
-            rotation(UNSLEEP[i][0], CCW)
+            print(UNSLEEP[i[0]])
+            rotation(UNSLEEP[i[0]], CCW)
         else:
-            print(UNSLEEP[i][0])
-            rotation(UNSLEEP[i][0], CW)
-            rotation(UNSLEEP[i][0], CW)
+            rotation(UNSLEEP[i[0]], CW)
+            rotation(UNSLEEP[i[0]], CW)
 
 GPIO.cleanup()
