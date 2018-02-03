@@ -121,7 +121,7 @@ SPR = 200
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(DIR, GPIO.OUT)
 GPIO.setup(STEP, GPIO.OUT)
-GPIO.setup(UNSLEEP, GPIO.OUT)
+GPIO.setup(UNSLEEP.values(), GPIO.OUT)
 GPIO.output(DIR, CW)
 
 MODE = (14, 15, 18)
