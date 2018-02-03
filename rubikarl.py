@@ -143,13 +143,13 @@ def rotation(unsleep, direction):
     gpios = {23: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
     GPIO.output(DIR, direction)
+    print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
     for i in range(step_count):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
         sleep(delay)
     GPIO.output(unsleep, GPIO.LOW)
-    print("Face: {1} ({2}) | direction: {3}".format(unsleep, gpios[unsleep], direction))
 
 commands = re.split(r'\s*', solution)
 for i in commands:
