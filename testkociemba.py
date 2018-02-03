@@ -1,7 +1,6 @@
 import kociemba
 import re
 import pygame
-import time
 import os.path
 
 pygame.init()
