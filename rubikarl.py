@@ -161,9 +161,9 @@ for i in commands:
         rotation(UNSLEEP[i], CW)
     if i.__len__() == 2:
         if i[1] == "'":
-            rotation(UNSLEEP[i], CCW)
+            rotation(UNSLEEP[i][0], CCW)
         else:
-            rotation(UNSLEEP[i], CW)
-            rotation(UNSLEEP[i], CW)
+            rotation(UNSLEEP[i][0], CW)
+            rotation(UNSLEEP[i][0], CW)
 
 GPIO.cleanup()
