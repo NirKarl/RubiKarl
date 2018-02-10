@@ -1,5 +1,5 @@
 from time import sleep
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import kociemba
 import re
 import pygame
