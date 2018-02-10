@@ -88,6 +88,7 @@ UNSLEEP_gpio = [UNSLEEP[u] for u in UNSLEEP]
 
 def rotation(unsleep, direction):
     None
+    print(unsleep)
     gpios = {23: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
     GPIO.output(DIR, direction)
