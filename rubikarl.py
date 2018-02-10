@@ -1,5 +1,5 @@
 from time import sleep
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import kociemba
 import re
 import pygame
@@ -10,6 +10,21 @@ im = lambda im: os.path.join("images", im)
 
 window_height = 90*3
 window_length = 90*4
+
+face_color = 0
+ok_button = ((270, 240), im("ok.jpg"))
+solve_button = ((240, 240), im("solve.jpg"))
+scramble_button = ((300, 240), im("scramble.jpg"))
+face_button = ((270, 210), None)
+CW_button = ((240, 210), im("CW.jpg"))
+CCW_button = ((300, 210), im("CCW.jpg"))
+
+
+def is_button_pressed(button):
+    return button[0][0] < pygame.mouse.get_pos()[0] < button[0][0] + 30 \
+           and \
+           button[0][1] < pygame.mouse.get_pos()[1] < button[0][1] + 30
+
 gameDisplay = pygame.display.set_mode((window_length, window_height))
 
 clock = pygame.time.Clock()
@@ -40,6 +55,68 @@ def init():
 
 init()
 
+DIR = 21
+STEP = 20
+UNSLEEP = {"U": 23, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
+CW = 1
+CCW = 0
+SPR = 200
+
+def pi_init():
+    None
+    # GPIO.setmode(GPIO.BCM)
+    # GPIO.setup(DIR, GPIO.OUT)
+    # GPIO.setup(STEP, GPIO.OUT)
+    # for u in UNSLEEP:
+    #     GPIO.setup(UNSLEEP[u], GPIO.OUT)
+    # GPIO.output(DIR, CW)
+    #
+    # MODE = (14, 15, 18)
+    # GPIO.setup(MODE, GPIO.OUT)
+    # RESOLUTION = {'Full': (0, 0, 0),
+    # 'Half': (1, 0, 0),
+    # '1/4': (0, 1, 0),
+    # '1/8': (1, 1, 0),
+    # '1/16': (0, 0, 1),
+    # '1/32': (1, 0, 1)}
+    # GPIO.output(MODE, RESOLUTION['1/32'])
+    #
+    # step_count = SPR * 32
+    # delay = 0.0104 / 32
+
+pi_init()
+
+UNSLEEP_gpio = [UNSLEEP[u] for u in UNSLEEP]
+
+def rotation(unsleep, direction):
+    None
+    #     gpios = {23: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
+    #     GPIO.output(unsleep, GPIO.HIGH)
+    #     GPIO.output(DIR, direction)
+    #     print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
+    #     for i in range(step_count):
+    #         GPIO.output(STEP, GPIO.HIGH)
+    #         sleep(delay)
+    #         GPIO.output(STEP, GPIO.LOW)
+    #         sleep(delay)
+    #     GPIO.output(unsleep, GPIO.LOW)
+
+
+def pi():
+    None
+    # commands = re.split(r'\s*', solution)
+    # for i in commands:
+    #     if i.__len__() == 1:
+    #         rotation(UNSLEEP[i], CW)
+    #     if i.__len__() == 2:
+    #         if i[1] == "'":
+    #             print(UNSLEEP[i[0]])
+    #             rotation(UNSLEEP[i[0]], CCW)
+    #         else:
+    #             rotation(UNSLEEP[i[0]], CW)
+    #             rotation(UNSLEEP[i[0]], CW)
+    #
+
 
 def background():
     backGrondImage = pygame.image.load(im("background.jpg"))
@@ -65,17 +142,36 @@ def is_balanced():
 
 solution = ""
 def check_pos(pos1, click):
+    global solution
+
     for c in colors:
         if c[1] != "5":  # 5 is a middle tile
-            if pos1[0] > pos[c][0] and pos1[0] < pos[c][0]+30 and pos1[1] > pos[c][1] and pos1[1] < pos[c][1]+30:
+            if pos[c][0] < pos1[0] < pos[c][0]+30 and pos[c][1] < pos1[1] < pos[c][1]+30:
                 change_color(c, click)
                 break
-    if pygame.mouse.get_pos()[0] > 300 and pygame.mouse.get_pos()[0] < 330 and pygame.mouse.get_pos()[1] > 210 and pygame.mouse.get_pos()[1] < 240 and is_balanced():
-        # print(colors)
-        # print(translate())
-        global solution
+
+    if is_button_pressed(face_button):
+        global face_color
+        face_color = (face_color + 1) % 6
+
+    elif is_button_pressed(CW_button):
+        rotation(UNSLEEP_gpio[face_color], CW)
+        print(raw_tiles[face_color] + ", CW")
+
+    elif is_button_pressed(CCW_button):
+        rotation(UNSLEEP_gpio[face_color], CCW)
+        print(raw_tiles[face_color] + ", CCW")
+
+
+    elif is_button_pressed(ok_button) and is_balanced():
         solution = kociemba.solve(translate())
         print(solution)
+
+    elif is_button_pressed(solve_button) and is_balanced():
+        solution = kociemba.solve(translate())
+        print(solution)
+        pi()
+
 
 def translate():
     arr = ""
@@ -89,8 +185,14 @@ while(not Exit):
     for c in colors:
         display_tile(tiles[colors[c]], pos[c])
 
+    display_tile(scramble_button[1], scramble_button[0])
+    display_tile(tiles[face_color], face_button[0])
+    display_tile(CW_button[1], CW_button[0])
+    display_tile(CCW_button[1], CCW_button[0])
+
     if is_balanced():
-        display_tile(im("ok.jpg"), (300, 210))
+        display_tile(ok_button[1], ok_button[0])
+        display_tile(solve_button[1], solve_button[0])
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -106,61 +208,4 @@ while(not Exit):
     pygame.display.update()
     clock.tick(60)
 pygame.quit()
-#quit()
-
-###############################################################################################################################################################################################################################################################
-###############################################################################################################################################################################################################################################################
-###############################################################################################################################################################################################################################################################
-
-DIR = 21
-STEP = 20
-UNSLEEP = {"U": 23, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
-CW = 1
-CCW = 0
-SPR = 200
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(DIR, GPIO.OUT)
-GPIO.setup(STEP, GPIO.OUT)
-for u in UNSLEEP:
-    GPIO.setup(UNSLEEP[u], GPIO.OUT)
-GPIO.output(DIR, CW)
-
-MODE = (14, 15, 18)
-GPIO.setup(MODE, GPIO.OUT)
-RESOLUTION = {'Full': (0, 0, 0),
-'Half': (1, 0, 0),
-'1/4': (0, 1, 0),
-'1/8': (1, 1, 0),
-'1/16': (0, 0, 1),
-'1/32': (1, 0, 1)}
-GPIO.output(MODE, RESOLUTION['1/32'])
-
-step_count = SPR * 32
-delay = 0.0104 / 32
-
-def rotation(unsleep, direction):
-    gpios = {23: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
-    GPIO.output(unsleep, GPIO.HIGH)
-    GPIO.output(DIR, direction)
-    print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
-    for i in range(step_count):
-        GPIO.output(STEP, GPIO.HIGH)
-        sleep(delay)
-        GPIO.output(STEP, GPIO.LOW)
-        sleep(delay)
-    GPIO.output(unsleep, GPIO.LOW)
-
-commands = re.split(r'\s*', solution)
-for i in commands:
-    if i.__len__() == 1:
-        rotation(UNSLEEP[i], CW)
-    if i.__len__() == 2:
-        if i[1] == "'":
-            print(UNSLEEP[i[0]])
-            rotation(UNSLEEP[i[0]], CCW)
-        else:
-            rotation(UNSLEEP[i[0]], CW)
-            rotation(UNSLEEP[i[0]], CW)
-
-GPIO.cleanup()
+# GPIO.cleanup()
