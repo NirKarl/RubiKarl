@@ -83,6 +83,7 @@ def changeResolution(resolution):
     GPIO.output(MODE, RESOLUTION[resolutions[resolution]])
     global res
     res = resolutions[res]
+    print(res)
 
 
 def pi_init():
