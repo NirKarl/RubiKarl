@@ -75,7 +75,7 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/8': (1, 1, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
-step_count = int(SPR * 8 * (105 / 104))
+step_count = int(SPR * 8)
 delay = 0.0104 / 32
 
 def changeResolution(resolution):
@@ -106,8 +106,8 @@ def rotation(unsleep, direction):
     print("rotation: ", unsleep, direction)
     gpios = {11: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
+    sleep(delay)
     GPIO.output(DIR, direction)
-    # print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
     for i in range(step_count):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
