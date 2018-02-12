@@ -206,4 +206,4 @@ while(not Exit):
     pygame.display.update()
     clock.tick(60)
 pygame.quit()
-# GPIO.cleanup()
+GPIO.cleanup()
