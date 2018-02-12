@@ -94,7 +94,7 @@ def rotation(unsleep, direction):
     GPIO.output(unsleep, GPIO.HIGH)
     GPIO.output(DIR, direction)
     # print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
-    for i in range(step_count/4):
+    for i in range(int(step_count/4)):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
