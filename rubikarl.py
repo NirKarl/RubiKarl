@@ -81,6 +81,7 @@ def pi_init():
     GPIO.output(DIR, CW)
     GPIO.setup(MODE, GPIO.OUT)
     GPIO.output(MODE, RESOLUTION['1/32'])
+    print(MODE)
 
 pi_init()
 
