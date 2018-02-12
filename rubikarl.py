@@ -69,7 +69,7 @@ RESOLUTION = {'Full': (0, 0, 0),
     '1/8': (1, 1, 0),
     '1/16': (0, 0, 1),
     '1/32': (1, 0, 1)}
-step_count = SPR * 32
+step_count = SPR * 8
 delay = 0.0104 / 32
 
 def pi_init():
@@ -94,7 +94,7 @@ def rotation(unsleep, direction):
     GPIO.output(unsleep, GPIO.HIGH)
     GPIO.output(DIR, direction)
     # print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
-    for i in range(int(step_count/4)):
+    for i in range(step_count):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
