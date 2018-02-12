@@ -85,7 +85,7 @@ def pi_init():
 
 pi_init()
 
-UNSLEEP_gpio = [UNSLEEP[u] for u in UNSLEEP]
+UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
 def rotation(unsleep, direction):
     None
