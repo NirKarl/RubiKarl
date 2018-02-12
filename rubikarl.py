@@ -188,6 +188,7 @@ while(not Exit):
     display_tile(tiles[face_color], face_button[0])
     display_tile(CW_button[1], CW_button[0])
     display_tile(CCW_button[1], CCW_button[0])
+    display_tile(test_button[1], test_button[0])
 
     if is_balanced():
         display_tile(ok_button[1], ok_button[0])
