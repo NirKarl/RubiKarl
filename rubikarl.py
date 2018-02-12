@@ -57,11 +57,11 @@ init()
 
 DIR = 21
 STEP = 20
-UNSLEEP = {"U": 23, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
+UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
 CW = 1
 CCW = 0
 SPR = 200
-MODE = (14, 15, 18)
+MODE = (14, 15, 23)
 RESOLUTION = {'Full': (0, 0, 0),
     'Half': (1, 0, 0),
     '1/4': (0, 1, 0),
@@ -89,7 +89,7 @@ UNSLEEP_gpio = [UNSLEEP[u] for u in UNSLEEP]
 def rotation(unsleep, direction):
     None
     print("rotation: ", unsleep, direction)
-    gpios = {23: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
+    gpios = {11: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
     GPIO.output(DIR, direction)
     # print("Face: {1} - {2} | direction: {3}".format(unsleep, gpios[unsleep], direction))
