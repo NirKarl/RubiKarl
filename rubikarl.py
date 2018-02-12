@@ -18,7 +18,12 @@ scramble_button = ((300, 240), im("scramble.jpg"))
 face_button = ((270, 210), None)
 CW_button = ((240, 210), im("CW.jpg"))
 CCW_button = ((300, 210), im("CCW.jpg"))
-test_button = ((270, 180), im("test.jpg"))
+test1_button = ((240, 0), im("test1.jpg"))
+test2_button = ((270, 0), im("test2.jpg"))
+test3_button = ((300, 0), im("test3.jpg"))
+test4_button = ((240, 30), im("test4.jpg"))
+test5_button = ((270, 30), im("test5.jpg"))
+test6_button = ((300, 30), im("test6.jpg"))
 
 
 def is_button_pressed(button):
@@ -188,7 +193,13 @@ while(not Exit):
     display_tile(tiles[face_color], face_button[0])
     display_tile(CW_button[1], CW_button[0])
     display_tile(CCW_button[1], CCW_button[0])
-    display_tile(test_button[1], test_button[0])
+    display_tile(test1_button[1], test1_button[0])
+    display_tile(test2_button[1], test2_button[0])
+    display_tile(test3_button[1], test3_button[0])
+    display_tile(test4_button[1], test4_button[0])
+    display_tile(test5_button[1], test5_button[0])
+    display_tile(test6_button[1], test6_button[0])
+
 
     if is_balanced():
         display_tile(ok_button[1], ok_button[0])
