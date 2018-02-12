@@ -67,15 +67,23 @@ UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
 CW = 1
 CCW = 0
 SPR = 200
+res = '1/32'
 MODE = (14, 15, 23)
 RESOLUTION = {'Full': (0, 0, 0),
-    'Half': (1, 0, 0),
-    '1/4': (0, 1, 0),
-    '1/8': (1, 1, 0),
-    '1/16': (0, 0, 1),
-    '1/32': (1, 0, 1)}
+              'Half': (1, 0, 0),
+              '1/4': (0, 1, 0),
+              '1/8': (1, 1, 0),
+              '1/16': (0, 0, 1),
+              '1/32': (1, 0, 1)}
 step_count = SPR * 4
 delay = 0.0104 / 32
+
+def changeResolution(resolution):
+    resolutions = {'Full': 'Half', 'Half': '1/4', '1/4': '1/8', '1/8': '1/16', '1/16': '1/32', '1/32': 'Full'}
+    GPIO.output(MODE, RESOLUTION[resolutions[resolution]])
+    global res
+    res = resolutions[res]
+
 
 def pi_init():
     None
@@ -175,6 +183,9 @@ def check_pos(pos1, click):
         solution = kociemba.solve(translate())
         print(solution)
         pi()
+
+    elif is_button_pressed(test1_button):
+        changeResolution(res)
 
 
 def translate():
