@@ -18,7 +18,7 @@ scramble_button = ((300, 240), im("scramble.jpg"))
 face_button = ((270, 210), None)
 CW_button = ((240, 210), im("CW.jpg"))
 CCW_button = ((300, 210), im("CCW.jpg"))
-test_button = ((270, 210), im("test.jpg"))
+test_button = ((270, 180), im("test.jpg"))
 
 
 def is_button_pressed(button):
