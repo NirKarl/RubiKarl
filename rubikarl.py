@@ -75,7 +75,7 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/8': (1, 1, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
-step_count = int(SPR/4)+2
+step_count = int(SPR/4)+5
 delay = 0.01 / 1
 
 def changeResolution(resolution):
