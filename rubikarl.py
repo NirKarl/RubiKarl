@@ -66,7 +66,7 @@ STEP = 20
 UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
 CW = 1
 CCW = 0
-SPR = 200
+SPR = 200  # step per revolution
 res = '1/32'
 MODE = (14, 15, 18)
 RESOLUTION = {'Full': (0, 0, 0),
@@ -75,7 +75,7 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/8': (1, 1, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
-step_count = int(SPR * 8)
+step_count = int(SPR/4)
 delay = 0.0104 / 32
 
 def changeResolution(resolution):
