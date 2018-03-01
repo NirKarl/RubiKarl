@@ -113,7 +113,7 @@ def rotation(unsleep, direction):
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
         sleep(delay)
-    GPIO.output(unsleep, GPIO.LOW)
+    #GPIO.output(unsleep, GPIO.LOW)
 
 
 def pi():
