@@ -104,6 +104,7 @@ UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 def rotation(unsleep, direction):
     None
     print("rotation: ", unsleep, direction)
+    print("step count & delay:", step_count, delay)
     gpios = {11: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
