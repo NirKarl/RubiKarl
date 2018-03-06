@@ -109,6 +109,7 @@ def rotation(unsleep, direction):
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
     GPIO.output(DIR, direction)
+    sleep(0.01)
     for i in range(step_count):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
