@@ -247,6 +247,10 @@ def check_pos(pos1, click):
         stop = True
         print("stop")
 
+    elif is_button_pressed(test4_button):
+        solution = "RRLLDDUUBBFF"
+        print(solution)
+        pi()
 
 def translate():
     arr = ""
