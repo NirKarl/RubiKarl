@@ -77,7 +77,7 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/8': (1, 1, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
-step_count = int(SPR/4)+1
+step_count = int(SPR/4)
 delay = 0.1 / 32
 
 def changeResolution(resolution):
@@ -97,7 +97,7 @@ def pi_init():
         GPIO.setup(UNSLEEP[u], GPIO.OUT)
     GPIO.output(DIR, CW)
     GPIO.setup(MODE, GPIO.OUT)
-    GPIO.output(MODE, RESOLUTION['1/32'])
+    GPIO.output(MODE, RESOLUTION[res])
 
 pi_init()
 
