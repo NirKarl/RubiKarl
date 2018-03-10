@@ -93,6 +93,7 @@ def changeResolution(resolution):
     global res
     global step_count
     global delay
+    global addition
     res = resolutions[res]
     step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
     delay = 0.1 / (32 * RESOLUTION_FACTOR[res])
@@ -207,12 +208,17 @@ def check_pos(pos1, click):
 
     elif is_button_pressed(test2_button):
         global addition
+        global step_count
         addition += 1
+        step_count += 1
+        changeResolution()
         print(addition)
 
     elif is_button_pressed(test3_button):
         global addition
+        global step_count
         addition -= 1
+        step_count -= 1
         print(addition)
 
 
