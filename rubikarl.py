@@ -25,6 +25,8 @@ test4_button = ((240, 30), im("test4.jpg"))
 test5_button = ((270, 30), im("test5.jpg"))
 test6_button = ((300, 30), im("test6.jpg"))
 
+stop = False
+
 
 def is_button_pressed(button):
     return button[0][0] < pygame.mouse.get_pos()[0] < button[0][0] + 30 \
@@ -138,8 +140,12 @@ def rotation(face, direction):
 
 def pi():
     None
+    global stop
     commands = re.split(r'\s*', solution)
     for i in commands:
+        if stop:
+            stop = False
+            break
         if i.__len__() == 1:
             rotation(i, CW)
         if i.__len__() == 2:
@@ -221,6 +227,11 @@ def check_pos(pos1, click):
         addition -= 1
         step_count -= 1
         print(addition)
+
+    elif is_button_pressed(test6_button):
+        global stop
+        stop = True
+        print("stop")
 
 
 def translate():
