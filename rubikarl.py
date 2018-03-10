@@ -77,15 +77,23 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/8': (1, 1, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
-step_count = int(SPR/4)
+RESOLUTION_FACTOR = {'Full': 1,
+                     'Half': 2,
+                     '1/4': 4,
+                     '1/8': 8,
+                     '1/16': 16,
+                     '1/32': 32}
+step_count = int(SPR/4)*RESOLUTION_FACTOR[res]
 delay = 0.1 / 32
 
 def changeResolution(resolution):
     resolutions = {'Full': 'Half', 'Half': '1/4', '1/4': '1/8', '1/8': '1/16', '1/16': '1/32', '1/32': 'Full'}
     GPIO.output(MODE, RESOLUTION[resolutions[resolution]])
     global res
+    global step_count
     res = resolutions[res]
-    print(res)
+    step_count = int(SPR / 4) * RESOLUTION_FACTOR[res]
+    print(res, step_count)
 
 
 def pi_init():
