@@ -83,16 +83,19 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/8': 8,
                      '1/16': 16,
                      '1/32': 32}
+addition = 0
 step_count = int(SPR/4)*RESOLUTION_FACTOR[res]
-delay = 0.1 / 32
+delay = 0.1 / (32*RESOLUTION_FACTOR[res])
 
 def changeResolution(resolution):
     resolutions = {'Full': 'Half', 'Half': '1/4', '1/4': '1/8', '1/8': '1/16', '1/16': '1/32', '1/32': 'Full'}
     GPIO.output(MODE, RESOLUTION[resolutions[resolution]])
     global res
     global step_count
+    global delay
     res = resolutions[res]
     step_count = int(SPR / 4) * RESOLUTION_FACTOR[res]
+    delay = 0.1 / (32 * RESOLUTION_FACTOR[res])
     print(res, step_count)
 
 
@@ -201,6 +204,14 @@ def check_pos(pos1, click):
 
     elif is_button_pressed(test1_button):
         changeResolution(res)
+
+    elif is_button_pressed(test2_button):
+        global addition
+        addition += 1
+
+    elif is_button_pressed(test3_button):
+        global addition
+        addition -= 1
 
 
 def translate():
