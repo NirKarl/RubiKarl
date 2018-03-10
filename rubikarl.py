@@ -137,12 +137,26 @@ def rotation(face, direction):
     GPIO.output(unsleep, GPIO.LOW)
     sleep(BETWEEN_ROTATIONS)
 
+def check_events():
+    global Exit
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            Exit = True
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r:
+                init()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            check_pos(pygame.mouse.get_pos(), event.button)
+
 
 def pi():
     None
     global stop
     commands = re.split(r'\s*', solution)
     for i in commands:
+        check_events()
         if stop:
             stop = False
             break
@@ -262,16 +276,7 @@ while(not Exit):
         display_tile(ok_button[1], ok_button[0])
         display_tile(solve_button[1], solve_button[0])
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            Exit = True
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_r:
-                init()
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            check_pos(pygame.mouse.get_pos(), event.button)
+    check_events()
 
     pygame.display.update()
     clock.tick(60)
