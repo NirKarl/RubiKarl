@@ -66,6 +66,7 @@ init()
 DIR = 21
 STEP = 20
 UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
+ADDITION = {"U": [0, 0], "R": [0, 0], "F": [0, 0], "D": [0, 0], "L": [0, 0], "B": [0, 0]}
 CW = 1
 CCW = 0
 SPR = 200  # step per revolution
@@ -115,16 +116,17 @@ pi_init()
 
 UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
-def rotation(unsleep, direction):
+def rotation(face, direction):
     None
-    print("rotation: ", unsleep, direction)
-    print("step count & delay:", step_count, delay)
+    unsleep = UNSLEEP[face]
+    print("rotation: ", face, "(", unsleep, ")", direction)
+    print("step count & delay:", step_count, "+", ADDITION[face][direction], delay)
     gpios = {11: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
     GPIO.output(DIR, direction)
     sleep(0.01)
-    for i in range(step_count):
+    for i in range(step_count + ADDITION[face][direction]):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
@@ -139,14 +141,14 @@ def pi():
     commands = re.split(r'\s*', solution)
     for i in commands:
         if i.__len__() == 1:
-            rotation(UNSLEEP[i], CW)
+            rotation(i, CW)
         if i.__len__() == 2:
             if i[1] == "'":
-                print(UNSLEEP[i[0]])
-                rotation(UNSLEEP[i[0]], CCW)
+                print(i[0])
+                rotation(i[0], CCW)
             else:
-                rotation(UNSLEEP[i[0]], CW)
-                rotation(UNSLEEP[i[0]], CW)
+                rotation(i[0], CW)
+                rotation(i[0], CW)
 
 
 def background():
@@ -186,11 +188,11 @@ def check_pos(pos1, click):
         face_color = (face_color + 1) % 6
 
     elif is_button_pressed(CW_button):
-        rotation(UNSLEEP_gpio[face_color], CW)
+        rotation(faces[face_color], CW)
         print(raw_tiles[face_color] + ", CW")
 
     elif is_button_pressed(CCW_button):
-        rotation(UNSLEEP_gpio[face_color], CCW)
+        rotation(faces[face_color], CCW)
         print(raw_tiles[face_color] + ", CCW")
 
 
