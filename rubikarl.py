@@ -66,11 +66,11 @@ init()
 DIR = 21
 STEP = 20
 UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
-ADDITION = {"U": [0, 0], "R": [0, 0], "F": [0, 0], "D": [0, 0], "L": [0, 0], "B": [0, 0]}
+ADDITION = {"U": [6, 7], "R": [3, 2], "F": [2, 4], "D": [3, 1], "L": [3, 3], "B": [6, 5]}
 CW = 1
 CCW = 0
 SPR = 200  # step per revolution
-res = 'Full'
+res = '1/16'
 MODE = (14, 15, 18)
 RESOLUTION = {'Full': (0, 0, 0),
               'Half': (1, 0, 0),
