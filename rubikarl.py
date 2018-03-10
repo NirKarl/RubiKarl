@@ -248,6 +248,7 @@ def check_pos(pos1, click):
         print("stop")
 
     elif is_button_pressed(test4_button):
+        global solutions
         solution = "RRLLDDUUBBFF"
         print(solution)
         pi()
