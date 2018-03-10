@@ -211,7 +211,6 @@ def check_pos(pos1, click):
         global step_count
         addition += 1
         step_count += 1
-        changeResolution()
         print(addition)
 
     elif is_button_pressed(test3_button):
