@@ -52,6 +52,8 @@ for t in range(1, 10):
 colors = {}
 colors_count = []
 
+BETWEEN_ROTATIONS = 0.1
+
 def init():
     global colors_count
     colors_count = [9, 9, 9, 9, 9, 9]
@@ -117,6 +119,7 @@ def rotation(unsleep, direction):
         sleep(delay)
     sleep(0.01)
     GPIO.output(unsleep, GPIO.LOW)
+    sleep(BETWEEN_ROTATIONS)
 
 
 def pi():
