@@ -88,7 +88,7 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/32': 32}
 addition = 0
 step_count = (int(SPR/4)*RESOLUTION_FACTOR[res]) + addition
-delay = 0.001 / (32*RESOLUTION_FACTOR[res])
+delay = 0.0001 / (32*RESOLUTION_FACTOR[res])
 
 def changeResolution(resolution):
     resolutions = {'Full': 'Half', 'Half': '1/4', '1/4': '1/8', '1/8': '1/16', '1/16': '1/32', '1/32': 'Full'}
@@ -248,8 +248,8 @@ def check_pos(pos1, click):
         print("stop")
 
     elif is_button_pressed(test4_button):
-        global solutions
         solution = "RRLLDDUUBBFF"
+        translate()
         print(solution)
         pi()
 
