@@ -208,10 +208,12 @@ def check_pos(pos1, click):
     elif is_button_pressed(test2_button):
         global addition
         addition += 1
+        print(addition)
 
     elif is_button_pressed(test3_button):
         global addition
         addition -= 1
+        print(addition)
 
 
 def translate():
