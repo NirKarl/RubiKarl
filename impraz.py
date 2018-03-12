@@ -37,17 +37,17 @@ recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)), (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2)))]
 
 def getColor(h, s, v):
-    if s in range(0, 90):
+    if s in range(0, 30):  # (0, 90)
         return WHITE
     else:
-        if h in range(20, 47):
+        if h in range(20, 47):  # (20, 47)
             return YELLOW
-        elif h in range(47, 85):
+        elif h in range(47, 85):  # (47, 85)
             return GREEN
-        elif h in range(85, 155):
+        elif h in range(85, 170):  # (85, 155)
             return BLUE
         else:
-            if v in range(150, 255):
+            if v in range(150, 255):  # (215, 255)
                 return ORANGE
             else:
                 return RED
