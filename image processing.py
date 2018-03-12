@@ -24,7 +24,7 @@ recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize
 
 colorsRanges = {'yellow': ((17, 100, 100), (40, 255, 255)),
                 'red': ((17, 100, 100), (40, 255, 255)),
-                'blue': ((100, 100, 100), (140, 255, 255)),
+                'blue': ((100, 100, 100), (255, 255, 140)),
                 'orange': ((3, 100, 100), (15, 255, 255)),
                 'white': ((0, 0, 255), (0, 10, 255)),
                 'green': ((48, 100, 100), (72, 255, 255))
@@ -55,12 +55,12 @@ def avgColor(img, pos):
 
 while True:
     ret, frame = cap.read()
-    # cv2.cvtColor(frame, )
+   #qcv2.cvtColor(frame, frame, COLOR_BGR2HSV)
     for p in recPos:
         if avgColor(frame, p)[0] > colorsRanges["blue"][0][0] and avgColor(frame, p)[0] < colorsRanges["blue"][1][0] and avgColor(frame, p)[1] > colorsRanges["blue"][0][1] and avgColor(frame, p)[1] < colorsRanges["blue"][1][1] and avgColor(frame, p)[2] > colorsRanges["blue"][0][2] and avgColor(frame, p)[2] < colorsRanges["blue"][1][2]:  # Blue
             drawRec(frame, p, BGR_colors["R"])
 
-        elif avgColor(frame, p)[1] > 0 and avgColor(frame, p)[1] < 255:  # Green
+        elif avgColor(frame, p)[0] > colorsRanges["green"][0][0] and avgColor(frame, p)[0] < colorsRanges["blue"][1][0] and avgColor(frame, p)[1] > colorsRanges["blue"][0][1] and avgColor(frame, p)[1] < colorsRanges["blue"][1][1] and avgColor(frame, p)[2] > colorsRanges["blue"][0][2] and avgColor(frame, p)[2] < colorsRanges["blue"][1][2]:  # Green
             drawRec(frame, p, BGR_colors["L"])
 
         else:

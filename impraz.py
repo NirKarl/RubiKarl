@@ -23,25 +23,6 @@ recColors = {WHITE: (255, 255, 255),
              ORANGE: (0, 125, 255)
              }
 
-RANGES = {'H': {'red': (0, 0),
-                'green': (0, 0),
-                'blue': (0, 0),
-                'orange': (0, 0),
-                'yellow': (0, 0),
-                'white': (90, 120)},
-          'S': {'red': (0, 0),
-                'green': (0, 0),
-                'blue': (0, 0),
-                'orange': (0, 0),
-                'yellow': (0, 0),
-                'white': (0, 0)},
-          'V': {'red': (0, 0),
-                'green': (0, 0),
-                'blue': (0, 0),
-                'orange': (0, 0),
-                'yellow': (0, 0),
-                'white': (0, 0)}}
-
 imgHeight = 480/2
 imgWidth = 640/2
 recSize = 35
@@ -66,31 +47,37 @@ def getColor(h, s, v):
         elif h in range(85, 155):
             return BLUE
         else:
-            if v in range(215, 255):
+            if v in range(150, 255):
                 return ORANGE
             else:
                 return RED
+
+def getRectColor(frame, p1, p2, drawFrame):
+    cube_frame = frame[p1[0]:p2[0], p1[1]:p2[1]].reshape(-1, 3).T
+    h = numpy.median(cube_frame[0])
+    s = numpy.median(cube_frame[1])
+    v = numpy.median(cube_frame[2])
+    color = getColor(h, s, v)
+    drawRec(drawFrame, (p1, p2), recColors[color])
+    return color
 
 def drawRec(img, pos, color, fill=False):
     thickness = 3
     if fill:
         thickness = -1
-    line = cv2.rectangle(frame, pos[0], pos[1], color, thickness)  # BGR
+    line = cv2.rectangle(img, pos[0], pos[1], color, thickness)  # BGR
     return line
 
 cap = cv2.VideoCapture(0)
 while True:
-    ret, frame = cap.read()
-    cv2.cvtColor(frame, cv2.COLOR_BGR2HSV, frame)
-    cube_frame = frame[0:200, 0:200].reshape(40000, 3).T
-    h = numpy.median(cube_frame[0])
-    s = numpy.median(cube_frame[1])
-    v = numpy.median(cube_frame[2])
+    ret, frameRGB = cap.read()
+    ret, frameHSV = cap.read()
+    cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV, frameHSV)
     for p in recPos:
-        drawRec(frame, p, recColors[getColor(h, s, v)])
-    cv2.imshow('cyber', frame)
-
-    print(getColor(h, s, v))
+        color = getRectColor(frameHSV, p[0], p[1], frameRGB)
+        print(color)
+    # cv2.imshow('HSV', frameHSV)
+    cv2.imshow('RGB', frameRGB)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
