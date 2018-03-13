@@ -25,7 +25,7 @@ recColors = {WHITE: (255, 255, 255),
 
 imgHeight = 480/2
 imgWidth = 640/2
-recSize = 35
+recSize = 60
 recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)), (int(imgWidth - recSize * 2.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
           ((int(imgWidth - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)), (int(imgWidth + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)), (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
@@ -37,7 +37,7 @@ recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)), (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2)))]
 
 def getColor(h, s, v):
-    if s in range(0, 30):  # (0, 90)
+    if s in range(0, 60):  # (0, 90)
         return WHITE
     else:
         if h in range(20, 47):  # (20, 47)
@@ -47,7 +47,7 @@ def getColor(h, s, v):
         elif h in range(85, 170):  # (85, 155)
             return BLUE
         else:
-            if v in range(150, 255):  # (215, 255)
+            if v in range(50, 255):  # (215, 255)
                 return ORANGE
             else:
                 return RED
@@ -65,17 +65,17 @@ def drawRec(img, pos, color, fill=False):
     thickness = 3
     if fill:
         thickness = -1
-    line = cv2.rectangle(img, pos[0], pos[1], color, thickness)  # BGR
-    return line
-
-cap = cv2.VideoCapture(0)
+    square = cv2.rectangle(img, pos[0], pos[1], color, thickness)  # BGR
+    return square
+# camera = input("enter the camera number: ")
+cap = cv2.VideoCapture(1)
 while True:
     ret, frameRGB = cap.read()
     ret, frameHSV = cap.read()
     cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV, frameHSV)
     for p in recPos:
         color = getRectColor(frameHSV, p[0], p[1], frameRGB)
-        print(color)
+        # print(color)
     # cv2.imshow('HSV', frameHSV)
     cv2.imshow('RGB', frameRGB)
 
