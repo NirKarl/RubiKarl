@@ -1,6 +1,7 @@
 import cv2
 import numpy
 import json
+import time
 
 WHITE = 'WHITE'
 BLUE = 'BLUE'
@@ -8,7 +9,7 @@ RED = 'RED'
 YELLOW = 'YELLOW'
 GREEN = 'GREEN'
 ORANGE = 'ORANGE'
-fileName = "RubikarlCalibration.json"
+calDataFile = "RubikarlCalibration.json"
 
 NIR_DICT = {WHITE: 'U',
             BLUE: 'R',
@@ -36,8 +37,8 @@ recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize
            (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
           ((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize / 2)),
            (int(imgWidth - recSize * 2.5 + recSize / 2), int(imgHeight + recSize / 2))),
-          ((int(imgWidth - recSize / 2), int(imgHeight - recSize / 2)),
-           (int(imgWidth + recSize / 2), int(imgHeight + recSize / 2))),
+          # ((int(imgWidth - recSize / 2), int(imgHeight - recSize / 2)),
+          #  (int(imgWidth + recSize / 2), int(imgHeight + recSize / 2))),
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight - recSize / 2)),
            (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize / 2))),
           ((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)),
@@ -102,7 +103,7 @@ cHSV = {
 }
 
 
-def calibrate(frame, p1, p2, color, RST):
+def calibrate(frame, p1, p2, color, RST = True):
     global cHSV
     if not RST:
         for i in range(0, 3):
@@ -123,13 +124,14 @@ while True:
     ret, frameRGB = cap.read()
     ret, frameHSV = cap.read()
     cv2.cvtColor(frameRGB, cv2.COLOR_BGR2HSV, frameHSV)
-    if count < 110 and count > 10:
+    if count < 50 and count > 10:
         for p in recPos:
-            calibrate(frameHSV, p[0], p[1], BLUE, count > 12)
-        print(cHSV[BLUE])
+            calibrate(frameHSV, p[0], p[1], BLUE)
+        # print(cHSV[BLUE])
 
     elif count == 110:
-        print(      cHSV[BLUE])
+        print(cHSV[BLUE])
+        saveCalData(cHSV, calDataFile)
 
     count += 1
 
