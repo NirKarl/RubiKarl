@@ -1,5 +1,6 @@
 import cv2
 import numpy
+import json
 
 WHITE = 'WHITE'
 BLUE = 'BLUE'
@@ -7,6 +8,7 @@ RED = 'RED'
 YELLOW = 'YELLOW'
 GREEN = 'GREEN'
 ORANGE = 'ORANGE'
+fileName = "RubikarlCalibration.json"
 
 NIR_DICT = {WHITE: 'U',
             BLUE: 'R',
@@ -45,6 +47,13 @@ recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)),
            (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2)))]
 
+def saveCalData(data, fileName):
+    with open(fileName, 'w+') as outfile:
+        json.dump(data, outfile)
+
+def readCalData(fileName):
+    with open(fileName, 'r') as outfile:
+        return json.load(outfile)
 
 def getColor(h, s, v):
     if s in range(0, 60):  # (0, 90)
@@ -84,18 +93,23 @@ def drawRec(img, pos, color, fill=False):
 # camera = input("enter the camera number: ")
 
 cHSV = {
-    "blue": {"min": [179, 255, 255], "max": [0, 0, 0]},
-    "white": {"min": [179, 255, 255], "max": [0, 0, 0]},
-    "yellow": {"min": [179, 255, 255], "max": [0, 0, 0]},
-    "red": {"min": [179, 255, 255], "max": [0, 0, 0]},
-    "orange": {"min": [179, 255, 255], "max": [0, 0, 0]},
-    "green": {"min": [179, 255, 255], "max": [0, 0, 0]}
+    BLUE: {"min": [255, 255, 255], "max": [0, 0, 0]},
+    WHITE: {"min": [255, 255, 255], "max": [0, 0, 0]},
+    YELLOW: {"min": [255, 255, 255], "max": [0, 0, 0]},
+    RED: {"min": [255, 255, 255], "max": [0, 0, 0]},
+    ORANGE: {"min": [255, 255, 255], "max": [0, 0, 0]},
+    GREEN: {"min": [255, 255, 255], "ma x": [0, 0, 0]}
 }
 
 
-def calibrate(frame, p1, p2, color):
-    cube_frame = frame[p1[0]:p2[0], p1[1]:p2[1]].reshape(-1, 3).T
+def calibrate(frame, p1, p2, color, RST):
     global cHSV
+    if not RST:
+        for i in range(0, 3):
+            cHSV[color]["min"][i] = 255
+            cHSV[color]["max"][i] = 0
+
+    cube_frame = frame[p1[0]:p2[0], p1[1]:p2[1]].reshape(-1, 3).T
     for i in range(0, 3):
         if numpy.median(cube_frame[i]) < cHSV[color]["min"][i]:
             cHSV[color]["min"][i] = numpy.median(cube_frame[i])
@@ -103,18 +117,19 @@ def calibrate(frame, p1, p2, color):
             cHSV[color]["max"][i] = numpy.median(cube_frame[i])
 
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 count = 0
 while True:
     ret, frameRGB = cap.read()
     ret, frameHSV = cap.read()
     cv2.cvtColor(frameRGB, cv2.COLOR_BGR2HSV, frameHSV)
-    if count < 115 and count > 15:
+    if count < 110 and count > 10:
         for p in recPos:
-            calibrate(frameHSV, p[0], p[1], "blue")
+            calibrate(frameHSV, p[0], p[1], BLUE, count > 12)
+        print(cHSV[BLUE])
 
-    elif count == 115:
-        print(cHSV["blue"])
+    elif count == 110:
+        print(      cHSV[BLUE])
 
     count += 1
 
