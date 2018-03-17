@@ -56,6 +56,10 @@ def readCalData(fileName):
     with open(fileName, 'r') as outfile:
         return json.load(outfile)
 
+def resetCalData(fileName):
+    with open(fileName, 'w+') as outfile:
+        json.dump("", outfile)
+
 def getColor(h, s, v):
     if s in range(0, 60):  # (0, 90)
         return WHITE
@@ -143,6 +147,8 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    if cv2.waitKey(1) & 0xFF == ord('r'):
+        resetCalData(calDataFile)
 
 cap.release()
 cv2.destroyAllWindows()
