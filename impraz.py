@@ -103,9 +103,8 @@ cHSV = {
     YELLOW: {"min": [255, 255, 255], "max": [0, 0, 0]},
     RED: {"min": [255, 255, 255], "max": [0, 0, 0]},
     ORANGE: {"min": [255, 255, 255], "max": [0, 0, 0]},
-    GREEN: {"min": [255, 255, 255], "ma x": [0, 0, 0]}
+    GREEN: {"min": [255, 255, 255], "max": [0, 0, 0]}
 }
-
 
 def calibrate(frame, p1, p2, color, RST = True):
     global cHSV
@@ -121,33 +120,121 @@ def calibrate(frame, p1, p2, color, RST = True):
         elif numpy.median(cube_frame[i]) > cHSV[color]["max"][i]:
             cHSV[color]["max"][i] = numpy.median(cube_frame[i])
 
+def setRanges(fileName):
+    readCalData(fileName)
 
 cap = cv2.VideoCapture(0)
 count = 0
+B = False
+G = False
+R = False
+O = False
+W = False
+Y = False
 while True:
     ret, frameRGB = cap.read()
     ret, frameHSV = cap.read()
     cv2.cvtColor(frameRGB, cv2.COLOR_BGR2HSV, frameHSV)
-    if count < 50 and count > 10:
-        for p in recPos:
-            calibrate(frameHSV, p[0], p[1], BLUE)
-        # print(cHSV[BLUE])
 
-    elif count == 110:
-        print(cHSV[BLUE])
-        saveCalData(cHSV, calDataFile)
+    if cv2.waitKey(1) & 0xFF == ord('b') or B:
+        B = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], BLUE)
+            # print(cHSV[BLUE])
 
-    count += 1
+        elif count == 110:
+            print(cHSV[BLUE], BLUE)
+            B = False
+            count = 0
+
+        count += 1
+
+    if cv2.waitKey(1) & 0xFF == ord('g') or G:
+        G = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], GREEN)
+            # print(cHSV[GREEN])
+
+        elif count == 110:
+            print(cHSV[GREEN], GREEN)
+            saveCalData(cHSV, calDataFile)
+            G = False
+            count = 0
+
+        count += 1
+
+    if cv2.waitKey(1) & 0xFF == ord('r') or R:
+        R = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], RED)
+            # print(cHSV[RED])
+
+        elif count == 110:
+            print(cHSV[RED], RED)
+            R = False
+            count = 0
+
+        count += 1
+
+    if cv2.waitKey(1) & 0xFF == ord('o') or O:
+        O = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], ORANGE)
+            # print(cHSV[ORANGE])
+
+        elif count == 110:
+            print(cHSV[ORANGE], ORANGE)
+            saveCalData(cHSV, calDataFile)
+            O = False
+            count = 0
+
+        count += 1
+
+    if cv2.waitKey(1) & 0xFF == ord('w') or W:
+        W = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], WHITE)
+            # print(cHSV[WHITE])
+
+        elif count == 110:
+            print(cHSV[WHITE], WHITE)
+            W = False
+            count = 0
+
+        count += 1
+
+    if cv2.waitKey(1) & 0xFF == ord('y') or Y:
+        Y = True
+        if count < 50 and count > 10:
+            for p in recPos:
+                calibrate(frameHSV, p[0], p[1], YELLOW)
+            # print(cHSV[YELLOW])
+
+        elif count == 110:
+            print(cHSV[YELLOW], YELLOW)
+            saveCalData(cHSV, calDataFile)
+            Y = False
+            count = 0
+
+        count += 1
 
     for p in recPos:
         color = getRectColor(frameHSV, p[0], p[1], frameRGB)
         # print(color)
+
     cv2.imshow('HSV', frameHSV)
     cv2.imshow('RGB', frameRGB)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    if cv2.waitKey(1) & 0xFF == ord('r'):
+
+    if cv2.waitKey(1) & 0xFF == ord('R'):
+        print("reset")
         resetCalData(calDataFile)
 
 cap.release()
