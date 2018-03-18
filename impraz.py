@@ -60,23 +60,6 @@ def resetCalData(fileName):
     with open(fileName, 'w+') as outfile:
         json.dump("", outfile)
 
-def getColor(h, s, v):
-    if s in range(0, 60):  # (0, 90)
-        return WHITE
-    else:
-        if h in range(20, 47):  # (20, 47)
-            return YELLOW
-        elif h in range(47, 85):  # (47, 85)
-            return GREEN
-        elif h in range(85, 170):  # (85, 155)
-            return BLUE
-        else:
-            if v in range(50, 255):  # (215, 255)
-                return ORANGE
-            else:
-                return RED
-
-
 def getRectColor(frame, p1, p2, drawFrame):
     cube_frame = frame[p1[0]:p2[0], p1[1]:p2[1]].reshape(-1, 3).T
     h = numpy.median(cube_frame[0])
@@ -106,6 +89,23 @@ cHSV = {
     GREEN: {"min": [255, 255, 255], "max": [0, 0, 0]}
 }
 
+def getColor(h, s, v):
+    global cHSV
+    if s in range(int(cHSV[WHITE]["min"][1]), int(cHSV[WHITE]["max"][1])):
+        return WHITE
+    else:
+        if h in range(int(cHSV[YELLOW]["min"][0]), int(cHSV[YELLOW]["max"][0])):
+            return YELLOW
+        elif h in range(int(cHSV[GREEN]["min"][0]), int(cHSV[GREEN]["max"][0])):
+            return GREEN
+        elif h in range(int(cHSV[BLUE]["min"][0]), int(cHSV[BLUE]["max"][0])):
+            return BLUE
+        else:
+            if v in range(int(cHSV[ORANGE]["min"][1]), int(cHSV[ORANGE]["max"][1])):
+                return ORANGE
+            else:
+                return RED
+
 def calibrate(frame, p1, p2, color, RST = True):
     global cHSV
     if not RST:
@@ -121,7 +121,8 @@ def calibrate(frame, p1, p2, color, RST = True):
             cHSV[color]["max"][i] = numpy.median(cube_frame[i])
 
 def setRanges(fileName):
-    readCalData(fileName)
+    global cHSV
+    cHSV = readCalData(fileName)
 
 cap = cv2.VideoCapture(0)
 count = 0
@@ -236,6 +237,11 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('R'):
         print("reset")
         resetCalData(calDataFile)
+
+    if cv2.waitKey(1) & 0xFF == ord('s'):
+        print("ranges set")
+        setRanges(calDataFile)
+
 
 cap.release()
 cv2.destroyAllWindows()
