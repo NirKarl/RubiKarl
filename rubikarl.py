@@ -276,9 +276,9 @@ def check_pos(pos1, click):
                 rotation("F")
                 rotation("R")
                 rotation("U")
-                rotation("R'")
-                rotation("U'")
-                rotation("F'")
+                rotation("R", CCW)
+                rotation("U", CCW)
+                rotation("F", CCW)
             for i in range(0, 100):
                 check_events()
             sleep(3)
