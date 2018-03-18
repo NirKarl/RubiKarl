@@ -90,8 +90,7 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/8': 8,
                      '1/16': 16,
                      '1/32': 32}
-global addition
-global step_count
+
 addition = 0
 step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
 delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
