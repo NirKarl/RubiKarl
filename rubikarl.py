@@ -272,13 +272,15 @@ def check_pos(pos1, click):
 
     elif is_button_pressed(test4_button):
         while not stop:
-            is_button_pressed(test6_button)
-            rotation("F")
-            rotation("R")
-            rotation("U")
-            rotation("R")
-            rotation("U")
-            rotation("F")
+            for i in range(0, 6):
+                rotation("F")
+                rotation("R")
+                rotation("U")
+                rotation("R")
+                rotation("U")
+                rotation("F")
+            for i in range(0, 100):
+                check_events()
 
 
 def translate():
