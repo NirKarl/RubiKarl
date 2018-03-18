@@ -271,7 +271,8 @@ def check_pos(pos1, click):
             rotation(face, direction)
 
     elif is_button_pressed(test4_button):
-        while not is_button_pressed(test6_button):
+        while not stop:
+            is_button_pressed(test6_button)
             rotation("F")
             rotation("R")
             rotation("U")
