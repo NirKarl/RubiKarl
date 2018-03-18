@@ -8,8 +8,8 @@ import os.path
 pygame.init()
 im = lambda im: os.path.join("images", im)
 
-window_height = 90*3
-window_length = 90*4
+window_height = 90 * 3
+window_length = 90 * 4
 
 face_color = 0
 ok_button = ((270, 240), im("ok.jpg"))
@@ -32,6 +32,7 @@ def is_button_pressed(button):
     return button[0][0] < pygame.mouse.get_pos()[0] < button[0][0] + 30 \
            and \
            button[0][1] < pygame.mouse.get_pos()[1] < button[0][1] + 30
+
 
 gameDisplay = pygame.display.set_mode((window_length, window_height))
 
@@ -56,12 +57,14 @@ colors_count = []
 
 BETWEEN_ROTATIONS = 0.1
 
+
 def init():
     global colors_count
     colors_count = [9, 9, 9, 9, 9, 9]
     for f in range(0, 6):
         for i in range(1, 10):
             colors[faces[f] + str(i)] = f
+
 
 init()
 
@@ -87,8 +90,9 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/16': 16,
                      '1/32': 32}
 addition = 0
-step_count = (int(SPR/4)*RESOLUTION_FACTOR[res]) + addition
-delay = 0.01 / (32*RESOLUTION_FACTOR[res])
+step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
+delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
+
 
 def changeResolution(resolution):
     resolutions = {'Full': 'Half', 'Half': '1/4', '1/4': '1/8', '1/8': '1/16', '1/16': '1/32', '1/32': 'Full'}
@@ -114,11 +118,13 @@ def pi_init():
     GPIO.setup(MODE, GPIO.OUT)
     GPIO.output(MODE, RESOLUTION[res])
 
+
 pi_init()
 
 UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
-def rotation(face, direction):
+
+def rotation(face, direction=CW):
     None
     unsleep = UNSLEEP[face]
     print("rotation: ", face, "(", unsleep, ")", direction)
@@ -136,6 +142,7 @@ def rotation(face, direction):
     sleep(0.01)
     GPIO.output(unsleep, GPIO.LOW)
     sleep(BETWEEN_ROTATIONS)
+
 
 def check_events():
     global Exit
@@ -175,9 +182,11 @@ def background():
     backGrondImage = pygame.image.load(im("background.jpg"))
     gameDisplay.blit(backGrondImage, (0, 0))
 
+
 def display_tile(color, place):
     cardImage = pygame.image.load(color)
     gameDisplay.blit(cardImage, place)
+
 
 def change_color(tile, click):
     colors_count[colors[tile]] -= 1
@@ -187,19 +196,23 @@ def change_color(tile, click):
         colors[tile] = (colors[tile] - 1) % 6
     colors_count[colors[tile]] += 1
 
+
 def is_balanced():
     for i in colors_count:
         if i != 9:
             return False
     return True
 
+
 solution = ""
+
+
 def check_pos(pos1, click):
     global solution
 
     for c in colors:
         if c[1] != "5":  # 5 is a middle tile
-            if pos[c][0] < pos1[0] < pos[c][0]+30 and pos[c][1] < pos1[1] < pos[c][1]+30:
+            if pos[c][0] < pos1[0] < pos[c][0] + 30 and pos[c][1] < pos1[1] < pos[c][1] + 30:
                 change_color(c, click)
                 break
 
@@ -247,10 +260,20 @@ def check_pos(pos1, click):
         stop = True
         print("stop")
 
-    elif is_button_pressed(test4_button):
+    elif is_button_pressed(test5_button):
         solution = "R2L2D2U2B2F2"
         print(solution)
         pi()
+
+    elif is_button_pressed(test4_button):
+        while not is_button_pressed(test6_button):
+            rotation("F")
+            rotation("R")
+            rotation("U")
+            rotation("R")
+            rotation("U")
+            rotation("F")
+
 
 def translate():
     arr = ""
@@ -259,7 +282,8 @@ def translate():
             arr += faces[colors[faces[f] + str(i)]]
     return arr
 
-while(not Exit):
+
+while (not Exit):
     background()
     for c in colors:
         display_tile(tiles[colors[c]], pos[c])
@@ -274,7 +298,6 @@ while(not Exit):
     display_tile(test4_button[1], test4_button[0])
     display_tile(test5_button[1], test5_button[0])
     display_tile(test6_button[1], test6_button[0])
-
 
     if is_balanced():
         display_tile(ok_button[1], ok_button[0])
