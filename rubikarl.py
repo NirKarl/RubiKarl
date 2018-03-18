@@ -276,7 +276,7 @@ def check_pos(pos1, click):
                 rotation("F")
                 rotation("R")
                 rotation("U")
-                rotation("R'")
+                rotation("R' ")
                 rotation("U'")
                 rotation("F'")
             for i in range(0, 100):
