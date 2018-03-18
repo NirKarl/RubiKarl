@@ -281,6 +281,7 @@ def check_pos(pos1, click):
                 rotation("F")
             for i in range(0, 100):
                 check_events()
+            sleep(3)
 
 
 def translate():
