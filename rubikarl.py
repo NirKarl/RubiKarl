@@ -4,6 +4,7 @@ import kociemba
 import re
 import pygame
 import os.path
+import random
 
 pygame.init()
 im = lambda im: os.path.join("images", im)
@@ -260,10 +261,14 @@ def check_pos(pos1, click):
         stop = True
         print("stop")
 
-    elif is_button_pressed(test5_button):
-        solution = "R2L2D2U2B2F2"
-        print(solution)
-        pi()
+    elif is_button_pressed(scramble_button):
+        numOfRotations = random.randint(15, 31)
+        faces_array = ["R", "R'", "L", "L'", "F", "F'", "B", "B'", "U", "U'", "D", "D'", ]
+        directions_array = [CW, CCW]
+        for i in (0, numOfRotations):
+            face = random(0, faces_array.__len__())
+            direction = random(0, directions_array.__len__())
+            rotation(face, direction)
 
     elif is_button_pressed(test4_button):
         while not is_button_pressed(test6_button):
