@@ -3,6 +3,8 @@ import numpy
 import json
 import time
 
+camera = 1  # usually 0
+
 WHITE = 'WHITE'
 BLUE = 'BLUE'
 RED = 'RED'
@@ -31,20 +33,28 @@ imgWidth = 640 / 2
 recSize = 55
 recPos = [((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)),
            (int(imgWidth - recSize * 2.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
+
           ((int(imgWidth - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)),
            (int(imgWidth + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
-          ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)),
-           (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
+
+          ((int(imgWidth + recSize * 3.5 - recSize / 2), int(imgHeight - recSize * 2.5 - recSize / 2)),
+           (int(imgWidth + recSize * 3.5 + recSize / 2), int(imgHeight - recSize * 2.5 + recSize / 2))),
+
           ((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight - recSize / 2)),
            (int(imgWidth - recSize * 2.5 + recSize / 2), int(imgHeight + recSize / 2))),
+
           # ((int(imgWidth - recSize / 2), int(imgHeight - recSize / 2)),
           #  (int(imgWidth + recSize / 2), int(imgHeight + recSize / 2))),
+
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight - recSize / 2)),
            (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize / 2))),
+
           ((int(imgWidth - recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)),
            (int(imgWidth - recSize * 2.5 + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2))),
+
           ((int(imgWidth - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)),
            (int(imgWidth + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2))),
+
           ((int(imgWidth + recSize * 2.5 - recSize / 2), int(imgHeight + recSize * 2.5 - recSize / 2)),
            (int(imgWidth + recSize * 2.5 + recSize / 2), int(imgHeight + recSize * 2.5 + recSize / 2)))]
 
@@ -124,7 +134,7 @@ def setRanges(fileName):
     global cHSV
     cHSV = readCalData(fileName)
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(camera)
 count = 0
 B = False
 G = False

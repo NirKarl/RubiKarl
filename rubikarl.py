@@ -180,8 +180,8 @@ def pi():
 
 
 def background():
-    backGrondImage = pygame.image.load(im("background.jpg"))
-    gameDisplay.blit(backGrondImage, (0, 0))
+    backgroundImage = pygame.image.load(im("background.jpg"))
+    gameDisplay.blit(backgroundImage, (0, 0))
 
 
 def display_tile(color, place):
