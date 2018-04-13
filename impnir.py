@@ -1,6 +1,6 @@
 import cv2
-import numpy
-import json
+import numpy as np
+import pickle
 import time
 import sys
 import math
@@ -9,8 +9,10 @@ camera = 1  # camera port usually 0
 cap = cv2.VideoCapture(camera)
 
 calFrames = {"RED": None, "BLUE": None, "GREEN": None, "WHITE": None, "ORANGE": None, "YELLOW": None}
-calFileName = "calData.jason"
-cubeColors = {"TOP": None, "FRONT": None, "RIGHT": None, "DOWN": None, "LEFT": None, "BACK": None}
+calFileName = "calData.dat"
+cubeColors = {"UP": None, "FRONT": None, "RIGHT": None, "DOWN": None, "LEFT": None, "BACK": None}
+forKociemba = {"RED": "F", "BLUE": "R", "GREEN": "L", "WHITE": "U", "ORANGE": "B", "YELLOW": "D"}
+cubeColorArrangement = []
 imgHeight = 480 / 2
 imgWidth = 640 / 2
 areaSize = 55
@@ -55,33 +57,47 @@ def saveImage(frame, color):
 def saveCalData():
     try:
         global calFrames
-        with open(calFileName, 'w+') as outfile:
-            json.dump(calFrames, outfile)
+        with open(calFileName, 'w+b') as outfile:
+            pickle.dump(calFrames, outfile)
+    except TypeError as e:
+        print(e)
     except:
         print("could no save data...", sys.exc_info()[0])
 
 def loadCalData():
     try:
-        with open(calFileName, 'r') as outfile:
-            return json.load(outfile)
+        with open(calFileName, 'rb') as outfile:
+            return pickle.load(outfile)
     except FileNotFoundError:
         print("first calibration file hasn't been made yet")
     except:
         print("file data has been corrupted")
 
+def saveCubeOrder():
+    try:
+        global calFrames
+        with open(calFileName, 'w+b') as outfile:
+            pickle.dump(calFrames, outfile)
+    except TypeError as e:
+        print(e)
+    except:
+        print("could no save data...", sys.exc_info()[0])
+
 def areaDif(area, frame1, frame2):
     dif = []
     for i in range(area[0][0], area[1][0]+1):
         for j in range(area[0][1], area[1][1]+1):
-            dif.append((frame1[j][i][0] - frame2[j][i][0], frame1[j][i][1] - frame2[j][i][1], frame1[j][i][2] - frame2[j][i][2]))
+            #print(frame1[j][i] - frame2[j][i])
+            dif.append(np.subtract(frame1[j][i], frame2[j][i]))
     return dif
 
-def getSumOfAbsValue(mat):
+def getSumOfAbsValues(mat):
     sumValue = [0, 0, 0]
     for i in mat:
-        sumValue[0] += numpy.abs(i[0])
-        sumValue[1] += numpy.abs(i[1])
-        sumValue[2] += numpy.abs(i[2])
+        sumValue[0] += np.abs(i[0])
+        sumValue[1] += np.abs(i[1])
+        sumValue[2] += np.abs(i[2])
+    print(mat.__len__(), sumValue)
     sumValue[0] /= mat.__len__()
     sumValue[1] /= mat.__len__()
     sumValue[2] /= mat.__len__()
@@ -93,16 +109,16 @@ def findBestColorMatch(frame, area):
     colorsRanking = {"RED": 0, "BLUE": 0, "GREEN": 0, "WHITE": 0, "ORANGE": 0, "YELLOW": 0}
     for i in calFrames:
         print("now getting sum of abs value", i)
-        colorsRanking[i] = getSumOfAbsValue(areaDif(area, calFrames[i], frame))
+        colorsRanking[i] = getSumOfAbsValues(areaDif(area, calFrames[i], frame))
 
     minColorRank = 1000000
     bestColorMatch = None
     for i in colorsRanking:
-        rank = colorsRanking[i][0]**2 + colorsRanking[i][1]**2 + colorsRanking[i][2]**2
+        rank = math.sqrt(colorsRanking[i][0]**2 + colorsRanking[i][1]**2 + colorsRanking[i][2]**2)
         if rank < minColorRank:
             minColorRank = rank
             bestColorMatch = i
-        print(i, colorsRanking[i], rank, minColorRank)
+        print(i, colorsRanking[i], rank)
 
     return bestColorMatch
 
@@ -110,15 +126,41 @@ def scanFace(face, frame):
     print("scan face started", face)
     cubeColors[face] = []
     for i in areas:
+        #i = areas[3]
         cubeColors[face].append(findBestColorMatch(frame, i))
-    # cubeColors[face] = map(lambda i: findBestColorMatch(frame, i), areas)
+        # cubeColors[face] = map(lambda i: findBestColorMatch(frame, i), areas)
     for i in cubeColors[face]: print(i)
+
+def sortCubeColor(colorsToFaces):
+    global cubeColors
+    global cubeColorArrangement
+    for c in ["UP", "RIGHT", "FRONT", "DOWN", "LEFT", "BACK"]:
+        f = colorsToFaces[c]
+        cubeColorArrangement.append(translateColorToFace(colorsToFaces, cubeColors[f][0:4]))
+        cubeColorArrangement.append(c[0])
+        cubeColorArrangement.append(translateColorToFace(colorsToFaces, cubeColors[f][4:9]))
+    return cubeColorArrangement
+
+def translateColorToFace(colorsToFaces, colors):
+    faces = []
+    for c in colors:
+        faces.append(colorsToFaces[c])
+    return faces
+
+
 
 loadCalData()
 while(True):
-    ret, frameHSV = cap.read()
+    ret, a = cap.read()
+    for i in range(1, 9):
+        ret, b = cap.read()
+        cv2.imshow('HSV', b)
+        a = np.add(a, b, dtype=np.int16)
+    frameHSV = a/10
+    #ret, frameHSV = cap.read()
     for i in areas: drawRec(frameHSV, i)
-    cv2.imshow('HSV', frameHSV)
+    # cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV, frameHSV)
+    # cv2.imshow('HSV', frameHSV)
 
     key = cv2.waitKey(1)
 
@@ -127,27 +169,21 @@ while(True):
 
     elif key & 0xFF == ord('R'):
         saveImage(frameHSV, "RED")
-        print(calFrames["RED"])
 
     elif key & 0xFF == ord('B'):
         saveImage(frameHSV, "BLUE")
-        print(calFrames["BLUE"])
 
     elif key & 0xFF == ord('W'):
         saveImage(frameHSV, "WHITE")
-        print(calFrames["WHITE"])
 
     elif key & 0xFF == ord('G'):
         saveImage(frameHSV, "GREEN")
-        print(calFrames["GREEN"])
 
     elif key & 0xFF == ord('O'):
         saveImage(frameHSV, "ORANGE")
-        print(calFrames["ORANGE"])
 
     elif key & 0xFF == ord('Y'):
         saveImage(frameHSV, "YELLOW")
-        print(calFrames["YELLOW"])
 
     elif key & 0xFF == ord('A'):
         saveImage(frameHSV, "YELLOW")
@@ -158,18 +194,34 @@ while(True):
         saveImage(frameHSV, "RED")
         print("saved them all (and some of your time ;) )")
 
-
     elif key & 0xFF == ord('s'):
         saveCalData()
 
     elif key & 0xFF == ord('f'):
         scanFace("FRONT", frameHSV)
 
-    elif key & 0xFF == ord('p'):
-        print(calFrames)
+    elif key & 0xFF == ord('r'):
+        scanFace("RIGHT", frameHSV)
+
+    elif key & 0xFF == ord('u'):
+        scanFace("UP", frameHSV)
+
+    elif key & 0xFF == ord('l'):
+        scanFace("LEFT", frameHSV)
+
+    elif key & 0xFF == ord('b'):
+        scanFace("BACK", frameHSV)
+
+    elif key & 0xFF == ord('d'):
+        scanFace("DOWN", frameHSV)
 
     elif key & 0xFF == ord('P'):
-        print(loadCalData())
+        calFrames = loadCalData()
+        print("loaded successfully")
+
+    elif key & 0xFF == ord('S'):
+
+        print(sortCubeColor(forKociemba))
 
 print(cubeColors)
 cap.release()
