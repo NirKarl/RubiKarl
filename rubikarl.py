@@ -5,6 +5,7 @@ import re
 import pygame
 import os.path
 import random
+import pickle
 
 pygame.init()
 im = lambda im: os.path.join("images", im)
@@ -59,15 +60,27 @@ colors_count = []
 BETWEEN_ROTATIONS = 0.1
 
 
-def init():
+def init(auto=False):
     global colors_count
-    colors_count = [9, 9, 9, 9, 9, 9]
-    for f in range(0, 6):
-        for i in range(1, 10):
-            colors[faces[f] + str(i)] = f
+    if not auto:
+        colors_count = [9, 9, 9, 9, 9, 9]
+        for f in range(0, 6):
+            for i in range(1, 10):
+                colors[faces[f] + str(i)] = f
+    else:
+        import impnir
+        try:
+            with open("orientationData.dat", 'rb') as outfile:
+                print("loading")
+                cubeInfo = pickle.load(outfile)
+        except FileNotFoundError:
+            print("first calibration file hasn't been made yet")
+        except:
+            print("file data has been corrupted")
 
 
-init()
+
+init(bool(input()))
 
 DIR = 21
 STEP = 20

@@ -10,6 +10,7 @@ cap = cv2.VideoCapture(camera)
 
 calFrames = {"RED": None, "BLUE": None, "GREEN": None, "WHITE": None, "ORANGE": None, "YELLOW": None}
 calFileName = "calData.dat"
+cubeOrientationFileName = "orientationData.dat"
 cubeColors = {"UP": None, "FRONT": None, "RIGHT": None, "DOWN": None, "LEFT": None, "BACK": None}
 forKociemba = {"RED": "F", "BLUE": "R", "GREEN": "L", "WHITE": "U", "ORANGE": "B", "YELLOW": "D"}
 cubeColorArrangement = []
@@ -67,16 +68,17 @@ def saveCalData():
 def loadCalData():
     try:
         with open(calFileName, 'rb') as outfile:
+            print("loading")
             return pickle.load(outfile)
     except FileNotFoundError:
         print("first calibration file hasn't been made yet")
     except:
         print("file data has been corrupted")
 
-def saveCubeOrder():
+def saveCubeOrientation():
     try:
-        global calFrames
-        with open(calFileName, 'w+b') as outfile:
+        global cubeColorArrangement
+        with open(cubeOrientationFileName, 'w+b') as outfile:
             pickle.dump(calFrames, outfile)
     except TypeError as e:
         print(e)
@@ -97,18 +99,18 @@ def getSumOfAbsValues(mat):
         sumValue[0] += np.abs(i[0])
         sumValue[1] += np.abs(i[1])
         sumValue[2] += np.abs(i[2])
-    print(mat.__len__(), sumValue)
+    # print(mat.__len__(), sumValue)
     sumValue[0] /= mat.__len__()
     sumValue[1] /= mat.__len__()
     sumValue[2] /= mat.__len__()
     return sumValue
 
 def findBestColorMatch(frame, area):
-    print("find best color match for", area)
+    # print("find best color match for", area)
     global calFrames
     colorsRanking = {"RED": 0, "BLUE": 0, "GREEN": 0, "WHITE": 0, "ORANGE": 0, "YELLOW": 0}
     for i in calFrames:
-        print("now getting sum of abs value", i)
+        # print("now getting sum of abs value", i)
         colorsRanking[i] = getSumOfAbsValues(areaDif(area, calFrames[i], frame))
 
     minColorRank = 1000000
@@ -118,7 +120,7 @@ def findBestColorMatch(frame, area):
         if rank < minColorRank:
             minColorRank = rank
             bestColorMatch = i
-        print(i, colorsRanking[i], rank)
+        # print(i, colorsRanking[i], rank)
 
     return bestColorMatch
 
@@ -129,7 +131,9 @@ def scanFace(face, frame):
         #i = areas[3]
         cubeColors[face].append(findBestColorMatch(frame, i))
         # cubeColors[face] = map(lambda i: findBestColorMatch(frame, i), areas)
-    for i in cubeColors[face]: print(i)
+    for i in cubeColors[face][0:4]: print(i)
+    print("*")
+    for i in cubeColors[face][4:9]: print(i)
 
 def sortCubeColor(colorsToFaces):
     global cubeColors
@@ -149,16 +153,18 @@ def translateColorToFace(colorsToFaces, colors):
 
 
 
-loadCalData()
+calFrames = loadCalData()
+print("loaded successfully")
+
 while(True):
     ret, a = cap.read()
     for i in range(1, 9):
         ret, b = cap.read()
+        for i in areas: drawRec(b, i)
         cv2.imshow('HSV', b)
         a = np.add(a, b, dtype=np.int16)
     frameHSV = a/10
     #ret, frameHSV = cap.read()
-    for i in areas: drawRec(frameHSV, i)
     # cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV, frameHSV)
     # cv2.imshow('HSV', frameHSV)
 
@@ -220,7 +226,7 @@ while(True):
         print("loaded successfully")
 
     elif key & 0xFF == ord('S'):
-
+        saveCubeOrientation()
         print(sortCubeColor(forKociemba))
 
 print(cubeColors)
