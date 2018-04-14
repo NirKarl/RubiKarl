@@ -5,7 +5,7 @@ import time
 import sys
 import math
 
-camera = 1  # camera port usually 0
+camera = 0  # camera port usually 0
 cap = cv2.VideoCapture(camera)
 
 calFrames = {"RED": None, "BLUE": None, "GREEN": None, "WHITE": None, "ORANGE": None, "YELLOW": None}
