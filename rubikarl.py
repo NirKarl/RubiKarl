@@ -60,6 +60,13 @@ colors_count = []
 BETWEEN_ROTATIONS = 0.1
 
 
+def translateCubeInfo(cubeInfo):
+    tilesInfo = []
+    translation = {"U": 0, "F": 1, "R": 2, "D": 3, "B": 4, "L": 5}
+    for c in cubeInfo:
+        tilesInfo.append(translation[c])
+    return tilesInfo
+
 def init(auto=False):
     global colors_count
     if not auto:
@@ -77,10 +84,14 @@ def init(auto=False):
             print("first calibration file hasn't been made yet")
         except:
             print("file data has been corrupted")
+        tilesInfo = translateCubeInfo(cubeInfo)
+        count = tilesInfo.__len__() - 1
+        for f in range(0, 6):
+            for i in range(1, 10):
+                colors[faces[f] + str(i)] = tilesInfo[count]
+                count -= 1
 
-
-
-init(bool(input()))
+init(input().lower() == "true")
 
 DIR = 21
 STEP = 20
