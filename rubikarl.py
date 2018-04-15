@@ -1,5 +1,8 @@
 from time import sleep
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    print("no pi i guess...")
 import kociemba
 import re
 import pygame
@@ -42,7 +45,7 @@ clock = pygame.time.Clock()
 Exit = False
 
 faces = ["U", "R", "F", "D", "L", "B"]
-raw_tiles = ["white.jpg", "blue.jpg", "red.jpg", "yellow.jpg", "green.jpg", "orange.jpg"]
+raw_tiles = ["blue.jpg", "white.jpg", "orange.jpg", "green.jpg", "yellow.jpg", "red.jpg"]
 tiles = [im(tile) for tile in raw_tiles]
 
 pos = {}
@@ -62,7 +65,7 @@ BETWEEN_ROTATIONS = 0.1
 
 def translateCubeInfo(cubeInfo):
     tilesInfo = []
-    translation = {"U": 0, "F": 1, "R": 2, "D": 3, "B": 4, "L": 5}
+    translation = {"U": 0, "F": 2, "R": 1, "D": 3, "B": 5, "L": 4}
     for c in cubeInfo:
         tilesInfo.append(translation[c])
     return tilesInfo
@@ -80,18 +83,24 @@ def init(auto=False):
             with open("orientationData.dat", 'rb') as outfile:
                 print("loading")
                 cubeInfo = pickle.load(outfile)
+                print("read: ", cubeInfo)
+                colors_count = []
+                for f in faces:
+                    colors_count.append(cubeInfo.count(f))
+                print(colors_count)
         except FileNotFoundError:
             print("first calibration file hasn't been made yet")
-        except:
-            print("file data has been corrupted")
+        # except:
+        #     print("file data has been corrupted")
         tilesInfo = translateCubeInfo(cubeInfo)
+        print(tilesInfo)
         count = tilesInfo.__len__() - 1
         for f in range(0, 6):
             for i in range(1, 10):
                 colors[faces[f] + str(i)] = tilesInfo[count]
                 count -= 1
 
-init(input().lower() == "true")
+init(input().lower() != "true")
 
 DIR = 21
 STEP = 20
@@ -144,8 +153,10 @@ def pi_init():
     GPIO.setup(MODE, GPIO.OUT)
     GPIO.output(MODE, RESOLUTION[res])
 
-
-pi_init()
+try:
+    pi_init()
+except:
+    print("no pi i guess...")
 
 UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
@@ -209,8 +220,8 @@ def background():
 
 
 def display_tile(color, place):
-    cardImage = pygame.image.load(color)
-    gameDisplay.blit(cardImage, place)
+    tileImage = pygame.image.load(color)
+    gameDisplay.blit(tileImage, place)
 
 
 def change_color(tile, click):
@@ -274,8 +285,8 @@ def check_pos(pos1, click):
         print(addition)
 
     elif is_button_pressed(test3_button):
-        global addition
-        global step_count
+        # global addition
+        # global step_count
         addition -= 1
         step_count -= 1
         print(addition)
@@ -352,4 +363,7 @@ while (not Exit):
     pygame.display.update()
     clock.tick(60)
 pygame.quit()
-GPIO.cleanup()
+try:
+    GPIO.cleanup()
+except:
+    print("too lazy to 'clean up'...")

@@ -5,14 +5,14 @@ import time
 import sys
 import math
 
-camera = 0  # camera port usually 0
+camera = 1  # camera port usually 0
 cap = cv2.VideoCapture(camera)
 
 calFrames = {"RED": None, "BLUE": None, "GREEN": None, "WHITE": None, "ORANGE": None, "YELLOW": None}
 calFileName = "calData.dat"
 cubeOrientationFileName = "orientationData.dat"
-cubeColors = {"UP": None, "FRONT": None, "RIGHT": None, "DOWN": None, "LEFT": None, "BACK": None}
-forKociemba = {"RED": "F", "BLUE": "R", "GREEN": "L", "WHITE": "U", "ORANGE": "B", "YELLOW": "D"}
+cubeColors = {"U": None, "F": None, "R": None, "D": None, "L": None, "B": None}
+forKociemba = {"ORANGE": "F", "WHITE": "R", "YELLOW": "L", "BLUE": "U", "RED": "B", "GREEN": "D"}
 cubeColorArrangement = []
 imgHeight = 480 / 2
 imgWidth = 640 / 2
@@ -75,11 +75,12 @@ def loadCalData():
     except:
         print("file data has been corrupted")
 
-def saveCubeOrientation():
+def saveCubeOrientation(data):
     try:
         global cubeColorArrangement
         with open(cubeOrientationFileName, 'w+b') as outfile:
-            pickle.dump(calFrames, outfile)
+            pickle.dump(data, outfile)
+            print('saved:', data)
     except TypeError as e:
         print(e)
     except:
@@ -138,12 +139,12 @@ def scanFace(face, frame):
 def sortCubeColor(colorsToFaces):
     global cubeColors
     global cubeColorArrangement
-    for c in ["UP", "RIGHT", "FRONT", "DOWN", "LEFT", "BACK"]:
+    for c in ["BLUE", "WHITE", "ORANGE", "GREEN", "YELLOW", "RED"]:
         f = colorsToFaces[c]
-        cubeColorArrangement.append(translateColorToFace(colorsToFaces, cubeColors[f][0:4]))
-        cubeColorArrangement.append(c[0])
-        cubeColorArrangement.append(translateColorToFace(colorsToFaces, cubeColors[f][4:9]))
-    return cubeColorArrangement
+        cubeColorArrangement.extend(translateColorToFace(colorsToFaces, cubeColors[f][0:4]))
+        cubeColorArrangement.append(forKociemba[c])
+        cubeColorArrangement.extend(translateColorToFace(colorsToFaces, cubeColors[f][4:9]))
+    return list(reversed(cubeColorArrangement))
 
 def translateColorToFace(colorsToFaces, colors):
     faces = []
@@ -204,30 +205,30 @@ while(True):
         saveCalData()
 
     elif key & 0xFF == ord('f'):
-        scanFace("FRONT", frameHSV)
+        scanFace("F", frameHSV)
 
     elif key & 0xFF == ord('r'):
-        scanFace("RIGHT", frameHSV)
+        scanFace("R", frameHSV)
 
     elif key & 0xFF == ord('u'):
-        scanFace("UP", frameHSV)
+        scanFace("U", frameHSV)
 
     elif key & 0xFF == ord('l'):
-        scanFace("LEFT", frameHSV)
+        scanFace("L", frameHSV)
 
     elif key & 0xFF == ord('b'):
-        scanFace("BACK", frameHSV)
+        scanFace("B", frameHSV)
 
     elif key & 0xFF == ord('d'):
-        scanFace("DOWN", frameHSV)
+        scanFace("D", frameHSV)
 
     elif key & 0xFF == ord('P'):
         calFrames = loadCalData()
         print("loaded successfully")
 
     elif key & 0xFF == ord('S'):
-        saveCubeOrientation()
-        print(sortCubeColor(forKociemba))
+        saveCubeOrientation(sortCubeColor(forKociemba))
+        break
 
 print(cubeColors)
 cap.release()
