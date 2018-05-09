@@ -13,8 +13,8 @@ import pickle
 pygame.init()
 im = lambda im: os.path.join("images", im)
 
-window_height = 90 * 3
-window_length = 90 * 4
+window_height = 90 * 3  # 270
+window_length = 90 * 4  # 360
 
 face_color = 0
 ok_button = ((270, 240), im("ok.jpg"))
@@ -29,6 +29,8 @@ test3_button = ((300, 0), im("test3.jpg"))
 test4_button = ((240, 30), im("test4.jpg"))
 test5_button = ((270, 30), im("test5.jpg"))
 test6_button = ((300, 30), im("test6.jpg"))
+auto_cal_button = ((0, 0), im("auto_cal.png"))
+manual_cal_button = ((0, 135), im("manual_cal.png"))
 
 stop = False
 
@@ -99,8 +101,6 @@ def init(auto=False):
             for i in range(1, 10):
                 colors[faces[f] + str(i)] = tilesInfo[count]
                 count -= 1
-
-init(input().lower() != "true")
 
 DIR = 21
 STEP = 20
@@ -266,13 +266,19 @@ def check_pos(pos1, click):
 
 
     elif is_button_pressed(ok_button) and is_balanced():
-        solution = kociemba.solve(translate())
-        print(solution)
+        try:
+            solution = kociemba.solve(translate())
+            print(solution)
+        except:
+            print("The cube arrangement is imposable to solve!")
 
     elif is_button_pressed(solve_button) and is_balanced():
-        solution = kociemba.solve(translate())
-        print(solution)
-        pi()
+        try:
+            solution = kociemba.solve(translate())
+            print(solution)
+            pi()
+        except:
+            print("The cube arrangement is imposable to solve!")
 
     elif is_button_pressed(test1_button):
         changeResolution(res)
@@ -337,6 +343,24 @@ def translate():
             arr += faces[colors[faces[f] + str(i)]]
     return arr
 
+exit_cal = False
+while (not exit_cal):
+    display_tile(manual_cal_button[1], manual_cal_button[0])
+    display_tile(auto_cal_button[1], auto_cal_button[0])
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            exit_cal = True
+            Exit = True
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            exit_cal = True
+            if pygame.mouse.get_pos()[1] < 135:
+                init(True)
+            init(False)
+
+    pygame.display.update()
+    clock.tick(60)
+# init(input().lower() != "true")
 
 while (not Exit):
     background()

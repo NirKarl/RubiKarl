@@ -4,9 +4,9 @@ import pickle
 import time
 import sys
 import math
+import settings
 
-camera = 1  # camera port usually 0
-cap = cv2.VideoCapture(camera)
+cap = cv2.VideoCapture(settings.CAMERA_PORT_NUM)
 
 calFrames = {"RED": None, "BLUE": None, "GREEN": None, "WHITE": None, "ORANGE": None, "YELLOW": None}
 calFileName = "calData.dat"

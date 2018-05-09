@@ -1,0 +1,1 @@
+CAMERA_PORT_NUM = 1  # camera port usually 0
