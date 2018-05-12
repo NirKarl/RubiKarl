@@ -135,7 +135,6 @@ def changeResolution(resolution):
     global res
     global step_count
     global delay
-    global addition
     res = resolutions[res]
     step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
     delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
