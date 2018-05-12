@@ -106,7 +106,7 @@ def init(auto=False):
 DIR = 24
 STEP = 23
 UNSLEEP = {"U": 26, "R": 6, "F": 13, "D": 5, "L": 19, "B": 11}
-ADDITION = {'1/4': {"U": [23, -22], "R": [3, 2], "F": [4, 4], "D": [3, 1], "L": [3, 3], "B": [6, 5]}}
+ADDITION = {'1/4': {"U": [23, -22], "R": [3, 2], "F": [23, 22], "D": [3, 1], "L": [3, 3], "B": [6, 5]}}
 CW = 1
 CCW = 0
 SPR = 200  # step per revolution
@@ -164,7 +164,7 @@ def rotation(face, direction=CW):
     global res
     unsleep = UNSLEEP[face]
     print("rotation: ", face, "(", unsleep, ")", direction)
-    print("step count & delay:", step_count, "+", int(step_count * (1 - 1 / ADDITION[res][face][direction])), delay)
+    print("step count & delay:",  int(step_count * (1 - 1 / ADDITION[res][face][direction])), delay)
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
     GPIO.output(DIR, direction)
