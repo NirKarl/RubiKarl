@@ -102,8 +102,8 @@ def init(auto=False):
                 colors[faces[f] + str(i)] = tilesInfo[count]
                 count -= 1
 
-DIR = 21
-STEP = 20
+DIR = 24
+STEP = 23
 UNSLEEP = {"U": 11, "R": 26, "F": 19, "D": 13, "L": 6, "B": 5}
 ADDITION = {"U": [6, 7], "R": [3, 2], "F": [4, 4], "D": [3, 1], "L": [3, 3], "B": [6, 5]}
 CW = 1
