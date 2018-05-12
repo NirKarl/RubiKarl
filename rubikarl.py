@@ -106,7 +106,7 @@ def init(auto=False):
 DIR = 24
 STEP = 23
 UNSLEEP = {"U": 26, "R": 6, "F": 13, "D": 5, "L": 19, "B": 11}
-ADDITION = {'1/4': {"U": [1000, 1000], "R": [1000, 1000], "F": [20, 23], "D": [1000, 1000], "L": [1000, 1000], "B": [1000, 1000]}}
+ADDITION = {'1/4': {"U": [22, 1000], "R": [1000, 1000], "F": [20, 23], "D": [1000, 1000], "L": [1000, 1000], "B": [1000, 1000]}}
 CW = 1
 CCW = 0
 SPR = 200  # step per revolution
@@ -302,7 +302,7 @@ def check_pos(pos1, click):
         print("stop")
 
     elif is_button_pressed(scramble_button):
-        numOfRotations = random.randint(7, 31)
+        numOfRotations = random.randint(6, 31)
         faces_array = ["R", "L", "F", "B", "U", "D"]
         directions_array = [CW, CCW]
         for i in range(0, numOfRotations):
