@@ -305,7 +305,7 @@ def check_pos(pos1, click):
         numOfRotations = random.randint(7, 31)
         faces_array = ["R", "L", "F", "B", "U", "D"]
         directions_array = [CW, CCW]
-        for i in (0, numOfRotations):
+        for i in range(0, numOfRotations):
             face = random.choice(faces_array)
             direction = random.choice(directions_array)
             rotation(face, direction)
