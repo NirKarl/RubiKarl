@@ -138,7 +138,8 @@ def changeResolution(resolution):
     global delay
     global addition
     res = resolutions[res]
-    step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
+    # step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
+    step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
     delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
     print(res, step_count)
 
@@ -171,7 +172,8 @@ def rotation(face, direction=CW):
     sleep(delay)
     GPIO.output(DIR, direction)
     sleep(0.01)
-    for i in range(step_count + ADDITION[face][direction]):
+    # for i in range(step_count + ADDITION[face][direction]):
+    for i in range(step_count):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
