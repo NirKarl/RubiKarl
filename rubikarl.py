@@ -164,7 +164,7 @@ def rotation(face, direction=CW):
     global res
     unsleep = UNSLEEP[face]
     print("rotation: ", face, "(", unsleep, ")", direction)
-    print("step count & delay:", step_count, "+", ADDITION[res][face][direction], delay)
+    print("step count & delay:", step_count, "+", int(step_count * (1 - 1 / ADDITION[res][face][direction])), delay)
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
     GPIO.output(DIR, direction)
