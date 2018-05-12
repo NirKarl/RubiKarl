@@ -302,12 +302,12 @@ def check_pos(pos1, click):
         print("stop")
 
     elif is_button_pressed(scramble_button):
-        numOfRotations = random.randint(15, 31)
-        faces_array = ["R", "R'", "L", "L'", "F", "F'", "B", "B'", "U", "U'", "D", "D'", ]
+        numOfRotations = random.randint(7, 31)
+        faces_array = ["R", "R'", "L", "L'", "F", "F'", "B", "B'", "U", "U'", "D", "D'"]
         directions_array = [CW, CCW]
         for i in (0, numOfRotations):
-            face = random(0, faces_array.__len__())
-            direction = random(0, directions_array.__len__())
+            face = random.choice(faces_array)
+            direction = random.choice(directions_array)
             rotation(face, direction)
 
     elif is_button_pressed(test4_button):
