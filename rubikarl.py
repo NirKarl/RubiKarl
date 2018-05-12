@@ -9,6 +9,7 @@ import pygame
 import os.path
 import random
 import pickle
+import math
 
 pygame.init()
 im = lambda im: os.path.join("images", im)
@@ -105,11 +106,11 @@ def init(auto=False):
 DIR = 24
 STEP = 23
 UNSLEEP = {"U": 26, "R": 6, "F": 13, "D": 5, "L": 19, "B": 11}
-ADDITION = {"U": [6, 7], "R": [3, 2], "F": [4, 4], "D": [3, 1], "L": [3, 3], "B": [6, 5]}
+ADDITION = {'1/4': {"U": [23, 22], "R": [3, 2], "F": [4, 4], "D": [3, 1], "L": [3, 3], "B": [6, 5]}}
 CW = 1
 CCW = 0
 SPR = 200  # step per revolution
-res = '1/16'
+res = '1/4'
 MODE = (14, 15, 18)
 RESOLUTION = {'Full': (0, 0, 0),
               'Half': (1, 0, 0),
@@ -124,8 +125,6 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/16': 16,
                      '1/32': 32}
 
-addition = 0
-# step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
 step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
 delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
 
@@ -138,7 +137,6 @@ def changeResolution(resolution):
     global delay
     global addition
     res = resolutions[res]
-    # step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
     step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
     delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
     print(res, step_count)
@@ -164,16 +162,15 @@ UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
 
 def rotation(face, direction=CW):
+    global res
     unsleep = UNSLEEP[face]
     print("rotation: ", face, "(", unsleep, ")", direction)
-    print("step count & delay:", step_count, "+", ADDITION[face][direction], delay)
-    # gpios = {11: "U", 26: "R", 19: "F", 13: "D", 6: "L", 5: "B"}
+    print("step count & delay:", step_count, "+", ADDITION[res][face][direction], delay)
     GPIO.output(unsleep, GPIO.HIGH)
     sleep(delay)
     GPIO.output(DIR, direction)
     sleep(0.01)
-    # for i in range(step_count + ADDITION[face][direction]):
-    for i in range(step_count):
+    for i in range(int(step_count * (1 - 1 / ADDITION[res][face][direction]))):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(delay)
         GPIO.output(STEP, GPIO.LOW)
