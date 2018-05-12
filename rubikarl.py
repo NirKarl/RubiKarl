@@ -125,7 +125,8 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/32': 32}
 
 addition = 0
-step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
+# step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res]) + addition
+step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
 delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
 
 
