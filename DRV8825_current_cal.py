@@ -14,5 +14,7 @@ def pi_init():
 
 try:
     pi_init()
+    input("press a key st clean up GPIOs")
+    GPIO.cleanup
 except:
     print("no pi i guess...")
