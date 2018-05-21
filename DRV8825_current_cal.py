@@ -10,10 +10,11 @@ def pi_init():
     for u in UNSLEEP:
         GPIO.setup(UNSLEEP[u], GPIO.OUT)
         GPIO.output(UNSLEEP[u], 1)
+    print("minimal wiring is set!")
 
 try:
     pi_init()
-    input("press a key st clean up GPIOs")
+    input("press a key to clean up GPIOs")
     GPIO.cleanup()
     print("GPIOs have been cleaned up.")
 except:
