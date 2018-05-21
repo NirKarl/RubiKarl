@@ -142,7 +142,7 @@ def changeResolution(resolution):
 
 
 def pi_init():
-    None
+    GPIO.cleanup
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(DIR, GPIO.OUT)
     GPIO.setup(STEP, GPIO.OUT)
