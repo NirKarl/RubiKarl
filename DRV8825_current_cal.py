@@ -6,7 +6,7 @@ except:
 UNSLEEP = {"U": 26, "R": 6, "F": 13, "D": 5, "L": 19, "B": 11}
 
 def pi_init():
-    GPIO.cleanup
+    GPIO.cleanup()
     GPIO.setmode(GPIO.BCM)
     for u in UNSLEEP:
         GPIO.setup(UNSLEEP[u], GPIO.OUT)
@@ -15,6 +15,6 @@ def pi_init():
 try:
     pi_init()
     input("press a key st clean up GPIOs")
-    GPIO.cleanup
+    GPIO.cleanup()
 except:
     print("no pi i guess...")
