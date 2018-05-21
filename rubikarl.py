@@ -145,10 +145,12 @@ def changeResolution(resolution):
 def pi_init():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(DIR, GPIO.OUT)
+    GPIO.output(DIR, 0)
     GPIO.setup(STEP, GPIO.OUT)
+    GPIO.output(STEP, 0)
     for u in UNSLEEP:
         GPIO.setup(UNSLEEP[u], GPIO.OUT)
-    GPIO.output(DIR, CW)
+        GPIO.output(UNSLEEP[u], 0)
     GPIO.setup(MODE, GPIO.OUT)
     GPIO.output(MODE, RESOLUTION[res])
 
