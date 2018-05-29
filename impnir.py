@@ -54,8 +54,8 @@ def drawRec(frame, pos, color=(0,0,0), fill=False):
 def saveImage(frame, color):
     print("save image", color)
     global calFrames
-    calFrames[color] = frame
     print(calFrames[color])
+    calFrames[color] = frame
 
 def saveCalData():
     try:
