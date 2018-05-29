@@ -9,6 +9,8 @@ import pygame
 import os.path
 import random
 import pickle
+import sys
+import time
 import math
 
 pygame.init()
@@ -16,6 +18,8 @@ im = lambda im: os.path.join("images", im)
 
 window_height = 90 * 3  # 270
 window_length = 90 * 4  # 360
+
+cubeOrientationFileName = "orientationData.dat"
 
 face_color = 0
 ok_button = ((270, 240), im("ok.jpg"))
@@ -65,9 +69,32 @@ colors_count = []
 
 BETWEEN_ROTATIONS = 0.1
 
+def readCubeOrientation(fileName):
+    global colors_count
+    try:
+        with open(fileName, 'rb') as outfile:
+            print("loading")
+            cubeInfo = pickle.load(outfile)
+            print("read: ", cubeInfo)
+            colors_count = []
+            for f in faces:
+                colors_count.append(cubeInfo.count(f))
+            print(colors_count)
+    except FileNotFoundError:
+        print("first calibration file hasn't been made yet")
+    # except:
+    #     print("file data has been corrupted")
+    tilesInfo = translateCubeInfo(cubeInfo)
+    print(tilesInfo)
+    count = tilesInfo.__len__() - 1
+    for f in range(0, 6):
+        for i in range(1, 10):
+            colors[faces[f] + str(i)] = tilesInfo[count]
+            count -= 1
 
 def translateCubeInfo(cubeInfo):
     tilesInfo = []
+    # faces = ["U", "R", "F", "D", "L", "B"]
     translation = {"U": 0, "F": 2, "R": 1, "D": 3, "B": 5, "L": 4}
     for c in cubeInfo:
         tilesInfo.append(translation[c])
@@ -82,26 +109,7 @@ def init(auto=False):
                 colors[faces[f] + str(i)] = f
     else:
         import impnir
-        try:
-            with open("orientationData.dat", 'rb') as outfile:
-                print("loading")
-                cubeInfo = pickle.load(outfile)
-                print("read: ", cubeInfo)
-                colors_count = []
-                for f in faces:
-                    colors_count.append(cubeInfo.count(f))
-                print(colors_count)
-        except FileNotFoundError:
-            print("first calibration file hasn't been made yet")
-        # except:
-        #     print("file data has been corrupted")
-        tilesInfo = translateCubeInfo(cubeInfo)
-        print(tilesInfo)
-        count = tilesInfo.__len__() - 1
-        for f in range(0, 6):
-            for i in range(1, 10):
-                colors[faces[f] + str(i)] = tilesInfo[count]
-                count -= 1
+        readCubeOrientation(cubeOrientationFileName)
 
 DIR = 24
 STEP = 23
@@ -285,18 +293,26 @@ def check_pos(pos1, click):
         changeResolution(res)
 
     elif is_button_pressed(test2_button):
-        global addition
-        global step_count
-        addition += 1
-        step_count += 1
-        print(addition)
+        readCubeOrientation(cubeOrientationFileName)
 
     elif is_button_pressed(test3_button):
-        # global addition
-        # global step_count
-        addition -= 1
-        step_count -= 1
-        print(addition)
+        try:
+            print('now saving')
+            global cubeColorArrangement
+            data = []
+            for f in range(0, 6):
+                for i in range(1, 10):
+                    data.insert(0, faces[colors[faces[f] + str(i)]])
+            with open('manualArrangement.dat', 'w+b') as outfile:
+                pickle.dump(data, outfile)
+                print('saved:', data)
+        except TypeError as e:
+            print(e)
+        except:
+            print("could no save data...", sys.exc_info()[0])
+
+    elif is_button_pressed(test5_button):
+        readCubeOrientation('manualArrangement.dat')
 
     elif is_button_pressed(test6_button):
         global stop
@@ -357,7 +373,8 @@ while (not exit_cal):
             exit_cal = True
             if pygame.mouse.get_pos()[1] < 135:
                 init(True)
-            init(False)
+            else:
+                init(False)
 
     pygame.display.update()
     clock.tick(60)
@@ -365,6 +382,7 @@ while (not exit_cal):
 
 while (not Exit):
     background()
+    # time.sleep(0.001)
     for c in colors:
         display_tile(tiles[colors[c]], pos[c])
 
