@@ -203,15 +203,14 @@ def check_events():
             check_pos(pygame.mouse.get_pos(), event.button)
 
 
-def pi():
-    None
-    global stop
-    commands = re.split(r'\s*', solution)
+def pi(stop):
+    commands = re.split(r'\s+', solution)
     for i in commands:
-        check_events()
         if stop:
-            stop = False
-            break
+            while pygame.event.wait().type != pygame.KEYDOWN:
+                None
+            time.sleep(0.1)
+        check_events()
         if i.__len__() == 1:
             rotation(i, CW)
         if i.__len__() == 2:
@@ -278,6 +277,7 @@ def check_pos(pos1, click):
         try:
             solution = kociemba.solve(translate())
             print(solution)
+            pi(True)
         except:
             print("The cube arrangement is imposable to solve!")
 
@@ -285,7 +285,7 @@ def check_pos(pos1, click):
         try:
             solution = kociemba.solve(translate())
             print(solution)
-            pi()
+            pi(False)
         except:
             print("The cube arrangement is imposable to solve!")
 
@@ -317,7 +317,10 @@ def check_pos(pos1, click):
     elif is_button_pressed(test6_button):
         solution = kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate())
         print(solution)
-        pi()
+        try:
+            pi()
+        except:
+            print("I SAID NO PI!!! DON'T PLAY WITH ME!")
 
     elif is_button_pressed(scramble_button):
         numOfRotations = random.randint(6, 31)
