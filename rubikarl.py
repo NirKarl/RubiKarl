@@ -292,10 +292,10 @@ def check_pos(pos1, click):
     elif is_button_pressed(test1_button):
         changeResolution(res)
 
-    elif is_button_pressed(test2_button):
+    elif is_button_pressed(test3_button):
         readCubeOrientation(cubeOrientationFileName)
 
-    elif is_button_pressed(test3_button):
+    elif is_button_pressed(test2_button):
         try:
             print('now saving')
             global cubeColorArrangement
@@ -315,9 +315,9 @@ def check_pos(pos1, click):
         readCubeOrientation('manualArrangement.dat')
 
     elif is_button_pressed(test6_button):
-        global stop
-        stop = True
-        print("stop")
+        solution = kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate())
+        print(solution)
+        pi()
 
     elif is_button_pressed(scramble_button):
         numOfRotations = random.randint(6, 31)
