@@ -318,7 +318,7 @@ def check_pos(pos1, click):
         solution = kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate())
         print(solution)
         try:
-            pi(False)
+            pi(True)
         except:
             print("I SAID NO PI!!! DON'T PLAY WITH ME!")
 
