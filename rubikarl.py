@@ -275,7 +275,7 @@ def check_pos(pos1, click):
 
     elif is_button_pressed(ok_button) and is_balanced():
         try:
-            solution = kociemba.solve(translate())
+            solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
             print(solution)
             pi(True)
         except:
@@ -283,7 +283,7 @@ def check_pos(pos1, click):
 
     elif is_button_pressed(solve_button) and is_balanced():
         try:
-            solution = kociemba.solve(translate())
+            solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
             print(solution)
             pi(False)
         except:
