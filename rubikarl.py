@@ -215,7 +215,7 @@ def pi(stop):
             rotation(i, CW)
         if i.__len__() == 2:
             if i[1] == "'":
-                print(i[0])
+                # print(i[0])
                 rotation(i[0], CCW)
             else:
                 rotation(i[0], CW)
@@ -251,6 +251,19 @@ def is_balanced():
 solution = ""
 
 
+def solve_cube(keyQ):
+    try:
+        solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
+        print('the straight solution: ', solution)
+        resolution = revers_solution(kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate()))
+        print('the reversed solution: ', resolution)
+        solution = solution if solution.__len__() <= resolution.__len__() else resolution
+        print('chosen solution: ', solution)
+        pi(keyQ)
+    except:
+        print("The cube arrangement is imposable to solve!")
+
+
 def check_pos(pos1, click):
     global solution
 
@@ -274,20 +287,10 @@ def check_pos(pos1, click):
 
 
     elif is_button_pressed(ok_button) and is_balanced():
-        try:
-            solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
-            print(solution)
-            pi(True)
-        except:
-            print("The cube arrangement is imposable to solve!")
+        solve_cube(True)
 
     elif is_button_pressed(solve_button) and is_balanced():
-        try:
-            solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
-            print(solution)
-            pi(False)
-        except:
-            print("The cube arrangement is imposable to solve!")
+        solve_cube(False)
 
     elif is_button_pressed(test1_button):
         changeResolution(res)
@@ -319,6 +322,7 @@ def check_pos(pos1, click):
         print(solution)
         try:
             pi(True)
+            None
         except:
             print("I SAID NO PI!!! DON'T PLAY WITH ME!")
 
@@ -362,6 +366,18 @@ def translate():
         for i in range(1, 10):
             arr += faces[colors[faces[f] + str(i)]]
     return arr
+
+def revers_solution(solotion):
+    steps = solution.split(' ')
+    new_steps = []
+    for step in reversed(steps):
+        if step.__len__() == 1:
+            new_steps.append(step + "'")
+        elif step[1] == "'":
+            new_steps.append(step[0])
+        else:
+            new_steps.append(step)  # this is like R2 F2 etc.
+    return ' '.join(new_steps)
 
 exit_cal = False
 while (not exit_cal):
