@@ -254,11 +254,12 @@ solution = ""
 def solve_cube(keyQ):
     try:
         global solution
-        solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
-        print('the straight solution: ', solution)
         resolution = revers_solution(kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate()))
         print('the reversed solution: ', resolution)
-        solution = solution if solution.__len__() <= resolution.__len__() else resolution
+        solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
+        print('the straight solution: ', solution)
+        if solution.__len__() > resolution.__len__():
+            solution = resolution
         print('chosen solution: ', solution)
         pi(keyQ)
     except:
