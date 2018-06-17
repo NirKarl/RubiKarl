@@ -253,6 +253,7 @@ solution = ""
 
 def solve_cube(keyQ):
     try:
+        global solution
         solution = kociemba.solve(translate(), 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB')
         print('the straight solution: ', solution)
         resolution = revers_solution(kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate()))
@@ -321,7 +322,7 @@ def check_pos(pos1, click):
         solution = kociemba.solve('UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB', translate())
         print(solution)
         try:
-            pi(True)
+            pi(False)
             None
         except:
             print("I SAID NO PI!!! DON'T PLAY WITH ME!")
