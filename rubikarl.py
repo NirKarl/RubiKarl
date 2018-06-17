@@ -369,8 +369,8 @@ def translate():
             arr += faces[colors[faces[f] + str(i)]]
     return arr
 
-def revers_solution(solotion):
-    steps = solution.split(' ')
+def revers_solution(sol):
+    steps = sol.split(' ')
     new_steps = []
     for step in reversed(steps):
         if step.__len__() == 1:
