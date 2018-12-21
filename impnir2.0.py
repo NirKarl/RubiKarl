@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
 import matplotlib as plt
+import settings
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(settings.CAMERA_PORT_NUM)
 # img = cv2.imread('img.jpg', cv2.IMREAD_COLOR)
 
 while True:
