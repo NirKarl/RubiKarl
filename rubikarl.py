@@ -401,7 +401,7 @@ while (not exit_cal):
     clock.tick(60)
 # init(input().lower() != "true")
 
-while (not Exit):
+while not Exit:
     background()
     # time.sleep(0.001)
     for c in colors:
