@@ -173,7 +173,7 @@ while(True):
 
     key = cv2.waitKey(1)
 
-    if key & 0xFF == ord('q'):
+    if key & 0xFF == 27:
         break
 
     elif key & 0xFF == ord('R'):
