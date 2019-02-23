@@ -67,7 +67,7 @@ for t in range(1, 10):
 colors = {}
 colors_count = []
 
-BETWEEN_ROTATIONS = 0.5
+BETWEEN_ROTATIONS = 0.1
 
 def readCubeOrientation(fileName):
     global colors_count
@@ -170,7 +170,7 @@ RESOLUTION_FACTOR = {'Full': 1,
                      '1/32': 32}
 
 step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
-delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
+delay = 0.02 / (32 * RESOLUTION_FACTOR[res])
 
 
 def changeResolution(resolution):
@@ -181,7 +181,7 @@ def changeResolution(resolution):
     global delay
     res = resolutions[res]
     step_count = (int(SPR / 4) * RESOLUTION_FACTOR[res])
-    delay = 0.01 / (32 * RESOLUTION_FACTOR[res])
+    delay = 0.02 / (32 * RESOLUTION_FACTOR[res])
     print(res, step_count)
 
 
