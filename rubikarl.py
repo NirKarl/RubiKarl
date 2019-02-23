@@ -164,8 +164,10 @@ def pi_init():
 
 try:
     pi_init()
+    isPi = True
 except:
     print("no pi i guess...")
+    isPi = False
 
 UNSLEEP_gpio = [UNSLEEP[u] for u in faces]
 
@@ -428,6 +430,8 @@ while not Exit:
     clock.tick(60)
 pygame.quit()
 try:
+    if isPi:
+        pi_init()
     GPIO.cleanup()
 except:
     print("too lazy to 'clean up'...")
