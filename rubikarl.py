@@ -52,7 +52,7 @@ clock = pygame.time.Clock()
 Exit = False
 
 faces = ["U", "R", "F", "D", "L", "B"]
-raw_tiles = ["wihte.jpg", "green.jpg", "orange.jpg", "yellow.jpg", "blue.jpg", "red.jpg"]
+raw_tiles = ["white.jpg", "green.jpg", "orange.jpg", "yellow.jpg", "blue.jpg", "red.jpg"]
 tiles = [im(tile) for tile in raw_tiles]
 
 pos = {}
