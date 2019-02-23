@@ -95,7 +95,7 @@ def readCubeOrientation(fileName):
 def translateCubeInfo(cubeInfo):
     tilesInfo = []
     # faces = ["U", "R", "F", "D", "L", "B"]
-    translation = {"U": 0, "F": 2, "R": 1, "D": 3, "B": 5, "L": 4}
+    translation = {"U": 0, "R": 1, "F": 2, "D": 3, "L": 4, "B": 5}
     for c in cubeInfo:
         tilesInfo.append(translation[c])
     return tilesInfo
