@@ -67,7 +67,7 @@ for t in range(1, 10):
 colors = {}
 colors_count = []
 
-BETWEEN_ROTATIONS = 0.1
+BETWEEN_ROTATIONS = 5
 
 def readCubeOrientation(fileName):
     global colors_count
